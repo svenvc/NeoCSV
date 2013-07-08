@@ -1,0 +1,17 @@
+{
+	"class" : {
+		"on:" : "SvenVanCaekenberghe 12/2/2012 13:31",
+		"parse:" : "SvenVanCaekenberghe 12/2/2012 13:35",
+		"parse:base:" : "SvenVanCaekenberghe 12/2/2012 13:51",
+		"parse:base:ifFail:" : "SvenVanCaekenberghe 12/2/2012 17:43",
+		"parse:ifFail:" : "SvenVanCaekenberghe 12/2/2012 17:43" },
+	"instance" : {
+		"base:" : "SvenVanCaekenberghe 12/2/2012 13:44",
+		"consumeWhitespace" : "SvenVanCaekenberghe 12/2/2012 17:30",
+		"initialize" : "SvenVanCaekenberghe 12/2/2012 13:49",
+		"next" : "SvenVanCaekenberghe 12/2/2012 13:31",
+		"on:" : "SvenVanCaekenberghe 12/2/2012 13:43",
+		"parseNumber" : "SvenVanCaekenberghe 12/3/2012 11:00",
+		"parseNumberExponent" : "SvenVanCaekenberghe 12/2/2012 20:06",
+		"parseNumberFraction" : "SvenVanCaekenberghe 12/2/2012 20:06",
+		"parseNumberInteger" : "SvenVanCaekenberghe 12/2/2012 20:06" } }

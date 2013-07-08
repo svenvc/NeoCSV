@@ -1,0 +1,16 @@
+{
+	"category" : "Neo-CSV-Tests",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "<historical>",
+	"instvars" : [
+		"x",
+		"y",
+		"z" ],
+	"name" : "NeoCSVTestObject",
+	"pools" : [
+		 ],
+	"super" : "Object",
+	"type" : "normal" }

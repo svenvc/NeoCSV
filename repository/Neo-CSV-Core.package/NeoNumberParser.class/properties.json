@@ -1,0 +1,15 @@
+{
+	"category" : "Neo-CSV-Core",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "<historical>",
+	"instvars" : [
+		"stream",
+		"base" ],
+	"name" : "NeoNumberParser",
+	"pools" : [
+		 ],
+	"super" : "Object",
+	"type" : "normal" }

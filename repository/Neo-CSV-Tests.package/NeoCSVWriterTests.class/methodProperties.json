@@ -1,0 +1,11 @@
+{
+	"class" : {
+		 },
+	"instance" : {
+		"testObjectFieldsTestObjects" : "SvenVanCaekenberghe 6/15/2012 23:06",
+		"testObjectFieldsTestObjectsExtra" : "SvenVanCaekenberghe 5/13/2013 13:07",
+		"testObjectFieldsTestObjectsUsingBlockAccessors" : "SvenVanCaekenberghe 5/13/2013 12:53",
+		"testRawFieldsDictionaries" : "SvenVanCaekenberghe 6/26/2012 20:39",
+		"testRawFieldsTestObjects" : "SvenVanCaekenberghe 6/15/2012 23:06",
+		"testSimple" : "SvenVanCaekenberghe 6/14/2012 20:58",
+		"testSimpleRaw" : "SvenVanCaekenberghe 6/15/2012 12:45" } }

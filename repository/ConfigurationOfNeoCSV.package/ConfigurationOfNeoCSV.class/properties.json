@@ -1,0 +1,14 @@
+{
+	"category" : "ConfigurationOfNeoCSV",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		"LastVersionLoad" ],
+	"commentStamp" : "<historical>",
+	"instvars" : [
+		"project" ],
+	"name" : "ConfigurationOfNeoCSV",
+	"pools" : [
+		 ],
+	"super" : "Object",
+	"type" : "normal" }

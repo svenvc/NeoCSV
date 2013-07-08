@@ -1,0 +1,18 @@
+{
+	"category" : "Neo-CSV-Core",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "<historical>",
+	"instvars" : [
+		"writeStream",
+		"separator",
+		"fieldWriter",
+		"lineEnd",
+		"fieldAccessors" ],
+	"name" : "NeoCSVWriter",
+	"pools" : [
+		 ],
+	"super" : "Object",
+	"type" : "normal" }

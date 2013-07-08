@@ -1,0 +1,3 @@
+private
+peekQuote
+	^ self peekChar == $"
