@@ -8,4 +8,6 @@
 		"testRawFieldsDictionaries" : "SvenVanCaekenberghe 6/26/2012 20:39",
 		"testRawFieldsTestObjects" : "SvenVanCaekenberghe 6/15/2012 23:06",
 		"testSimple" : "SvenVanCaekenberghe 6/14/2012 20:58",
-		"testSimpleRaw" : "SvenVanCaekenberghe 6/15/2012 12:45" } }
+		"testSimpleRaw" : "SvenVanCaekenberghe 6/15/2012 12:45",
+		"testWriteEmbeddedQuote" : "SvenVanCaekenberghe 1/14/2014 23:37",
+		"testWriteHeader" : "SvenVanCaekenberghe 12/11/2013 21:50" } }

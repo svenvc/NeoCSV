@@ -1,11 +1,10 @@
-private
+private - reading
 readNextRecordWithFieldAccessors: record
 	| fieldIndex |
 	fieldIndex := 1.
 	fieldAccessors do: [ :each | | rawValue |
-		rawValue := self readField.
-		rawValue isEmpty
+		rawValue := self readFieldAndSeparator.
+		(rawValue isEmpty or: [ each isNil ])
 			ifFalse: [ 
-				each ifNotNil: [ 
-					record at: fieldIndex put: (each value: rawValue).
-					fieldIndex := fieldIndex + 1 ] ] ]
+				record at: fieldIndex put: (each value: rawValue).
+				fieldIndex := fieldIndex + 1 ] ]

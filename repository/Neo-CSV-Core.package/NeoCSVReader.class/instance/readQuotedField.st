@@ -1,4 +1,4 @@
-private
+private - reading
 readQuotedField
 	self readQuote.
 	^ self stringStreamContents: [ :stream |

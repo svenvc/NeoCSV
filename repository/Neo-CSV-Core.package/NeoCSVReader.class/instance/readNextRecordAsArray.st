@@ -1,4 +1,4 @@
-private
+private - reading
 readNextRecordAsArray
 	fieldAccessors ifNotNil: [ 
 		fieldCount := fieldAccessors count: [ :each | each notNil ] ].

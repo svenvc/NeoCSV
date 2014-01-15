@@ -1,4 +1,4 @@
-private
+private - reading
 readField
 	^ self peekQuote
 		ifTrue: [

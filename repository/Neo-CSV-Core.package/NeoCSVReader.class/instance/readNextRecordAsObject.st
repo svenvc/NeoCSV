@@ -1,10 +1,10 @@
-private
+private - reading
 readNextRecordAsObject
 	| object |
 	object := recordClass new.
 	fieldAccessors do: [ :each | | rawValue |
-		rawValue := self readField.
+		rawValue := self readFieldAndSeparator.
 		(rawValue isEmpty or: [ each isNil ])
 			ifFalse: [ each value: object value: rawValue ] ].
-	self assert: (self atEnd or: [ self readEndOfLine ]).
+	self readAtEndOrEndOfLine.
 	^ object

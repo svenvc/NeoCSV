@@ -2,10 +2,15 @@
 	"class" : {
 		 },
 	"instance" : {
+		"testEmbeddedQuotes" : "SvenVanCaekenberghe 1/14/2014 23:20",
 		"testEmptyConversions" : "SvenVanCaekenberghe 11/4/2012 19:54",
 		"testEmptyConversionsTestObject" : "SvenVanCaekenberghe 11/4/2012 19:54",
 		"testEmptyFieldQuoted" : "SvenVanCaekenberghe 6/14/2012 19:53",
+		"testEmptyFieldSecondRecordQuoted" : "SvenVanCaekenberghe 1/15/2014 12:10",
+		"testEmptyFieldSecondRecordUnquoted" : "SvenVanCaekenberghe 1/15/2014 12:10",
 		"testEmptyFieldUnquoted" : "SvenVanCaekenberghe 6/14/2012 19:53",
+		"testEmptyLastFieldQuoted" : "SvenVanCaekenberghe 1/14/2014 22:33",
+		"testEmptyLastFieldUnquoted" : "SvenVanCaekenberghe 1/14/2014 22:33",
 		"testOneLineEmpty" : "SvenVanCaekenberghe 6/14/2012 19:57",
 		"testOneLineOneFieldQuoted" : "SvenVanCaekenberghe 6/14/2012 19:56",
 		"testOneLineOneFieldUnquoted" : "SvenVanCaekenberghe 6/14/2012 19:55",
@@ -15,6 +20,7 @@
 		"testReadAsIntegerArrays" : "SvenVanCaekenberghe 6/21/2012 22:56",
 		"testReadDictionaries" : "SvenVanCaekenberghe 5/5/2013 12:15",
 		"testReadIntegers" : "SvenVanCaekenberghe 5/5/2013 12:15",
+		"testReadIntegersReadingHeaderAfterFieldDefinitions" : "SvenVanCaekenberghe 12/11/2013 20:43",
 		"testReadTestsObjects" : "SvenVanCaekenberghe 5/5/2013 12:15",
 		"testReadTestsObjectsUsingBlockAccessors" : "SvenVanCaekenberghe 5/13/2013 12:51",
 		"testReadTestsObjectsWithIgnoredField" : "SvenVanCaekenberghe 5/5/2013 13:09",
