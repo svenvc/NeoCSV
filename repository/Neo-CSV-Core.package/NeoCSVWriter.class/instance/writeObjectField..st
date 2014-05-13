@@ -1,3 +1,4 @@
 private
 writeObjectField: object
-	object printOn: writeStream 
+	object = emptyFieldValue
+		ifFalse: [ object printOn: writeStream ]

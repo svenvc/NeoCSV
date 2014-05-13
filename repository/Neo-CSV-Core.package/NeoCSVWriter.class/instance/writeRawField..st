@@ -1,3 +1,4 @@
 private
 writeRawField: object
-	writeStream nextPutAll: object asString
+	object = emptyFieldValue 
+		ifFalse: [	writeStream nextPutAll: object asString ]

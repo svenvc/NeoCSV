@@ -8,4 +8,4 @@ readFirstRecord
 			whileFalse: [ 
 				stream nextPut: self readField.
 				(self readSeparator and: [ self atEnd or: [ self peekEndOfLine ] ])
-					ifTrue: [ stream nextPut: String new ] ] ]
+					ifTrue: [ stream nextPut: emptyFieldValue ] ] ]

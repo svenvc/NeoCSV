@@ -2,6 +2,7 @@
 	"class" : {
 		 },
 	"instance" : {
+		"testEmptyFieldValue" : "SvenVanCaekenberghe 5/13/2014 15:53",
 		"testObjectFieldsTestObjects" : "SvenVanCaekenberghe 6/15/2012 23:06",
 		"testObjectFieldsTestObjectsExtra" : "SvenVanCaekenberghe 5/13/2013 13:07",
 		"testObjectFieldsTestObjectsUsingBlockAccessors" : "SvenVanCaekenberghe 5/13/2013 12:53",

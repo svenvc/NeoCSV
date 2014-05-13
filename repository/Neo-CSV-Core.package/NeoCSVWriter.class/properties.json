@@ -10,7 +10,8 @@
 		"separator",
 		"fieldWriter",
 		"lineEnd",
-		"fieldAccessors" ],
+		"fieldAccessors",
+		"emptyFieldValue" ],
 	"name" : "NeoCSVWriter",
 	"pools" : [
 		 ],

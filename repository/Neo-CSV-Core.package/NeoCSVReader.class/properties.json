@@ -13,7 +13,8 @@
 		"fieldCount",
 		"recordClass",
 		"recordClassIsIndexable",
-		"fieldAccessors" ],
+		"fieldAccessors",
+		"emptyFieldValue" ],
 	"name" : "NeoCSVReader",
 	"pools" : [
 		 ],
