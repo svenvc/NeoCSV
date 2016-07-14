@@ -2,6 +2,7 @@
 	"class" : {
 		"DevelopmentSupport" : "SvenVanCaekenberghe 6/22/2012 16:27",
 		"baseConfigurationClassIfAbsent:" : "SvenVanCaekenberghe 6/22/2012 16:27",
+		"catalogContactInfo" : "SvenVanCaekenberghe 1/5/2016 09:32",
 		"catalogDescription" : "SvenVanCaekenberghe 12/11/2013 23:20",
 		"catalogKeywords" : "SvenVanCaekenberghe 12/11/2013 23:23",
 		"ensureMetacello" : "SvenVanCaekenberghe 6/22/2012 16:27",
@@ -15,8 +16,11 @@
 	"instance" : {
 		"baseline1:" : "SvenVanCaekenberghe 6/22/2012 16:45",
 		"project" : "SvenVanCaekenberghe 6/22/2012 16:27",
-		"stable:" : "SvenVanCaekenberghe 1/21/2014 20:05",
+		"stable:" : "SvenVanCaekenberghe 9/9/2015 13:45",
 		"version10:" : "SvenVanCaekenberghe 1/21/2014 20:05",
+		"version11:" : "SvenVanCaekenberghe 9/27/2014 00:46",
+		"version12:" : "SvenVanCaekenberghe 3/29/2015 11:47",
+		"version13:" : "SvenVanCaekenberghe 9/9/2015 13:45",
 		"version1:" : "SvenVanCaekenberghe 9/27/2012 20:31",
 		"version2:" : "SvenVanCaekenberghe 9/27/2012 20:31",
 		"version3:" : "SvenVanCaekenberghe 9/27/2012 20:31",
