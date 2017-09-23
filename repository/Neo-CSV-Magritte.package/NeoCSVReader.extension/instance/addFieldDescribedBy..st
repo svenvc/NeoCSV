@@ -8,6 +8,10 @@ addFieldDescribedBy: aDescription
 				s trimmed
 					ifNotEmpty: [ c value: s trimmed ]
 					ifEmpty: [ nil ] "Fields with only whitespace get here by accident, so re-nil the value" ] ]
-		ifAbsent: [ self addField: setter converter: [ :s | 
-			"Fields with only whitespace get here by accident, so re-nil the value"
-			s trimmed ifEmpty: [ nil ] ] ] 
+		ifAbsent: [ 
+			self addField: setter converter: [ :s | 
+				s trimmed
+					ifEmpty: [ nil ]
+					ifNotEmpty: [ :trimmed | 
+						"Fields with only whitespace get here by accident, so re-nil the value"
+						aDescription fromString: trimmed ] ] ] 
