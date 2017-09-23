@@ -9,10 +9,10 @@ Example:
 MyDomainClass>>#descriptionPhone
 	<magritteDescription>
 	^ MAStringDescription new
-			accessor: #phone;
-			propertyAt: #csvFieldName put: 'Phone';
-			propertyAt: #csvReader put: [ :s | s select: #isDigit ];
-			yourself
+		accessor: #phone;
+		propertyAt: #csvFieldName put: 'Phone';
+		propertyAt: #csvReader put: [ :s | s select: #isDigit ];
+		yourself
 ```
 
 ### 2. Read a CSV File
