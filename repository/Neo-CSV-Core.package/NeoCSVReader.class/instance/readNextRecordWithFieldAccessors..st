@@ -8,6 +8,9 @@ readNextRecordWithFieldAccessors: record
 		each
 			ifNotNil: [ 
 				rawValue = emptyFieldValue
-					ifTrue: [ record at: fieldIndex put: emptyFieldValue ]
+					ifTrue: [ 
+						emptyFieldValue = #passNil
+							ifTrue: [ record at: fieldIndex put: (each value: nil) ]
+							ifFalse: [ record at: fieldIndex put: emptyFieldValue ] ]
 					ifFalse: [ record at: fieldIndex put: (each value: rawValue) ].
 				fieldIndex := fieldIndex + 1 ] ]

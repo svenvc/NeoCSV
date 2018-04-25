@@ -1,10 +1,11 @@
 parsing
 parseNumberFraction
-	| number power |
+	| number power x |
 	number := 0.
 	power := 1.0.
-	[ stream atEnd not and: [ stream peek digitValue between: 0 and: base - 1 ] ]
+	[ (x := stream peek) notNil and: [ (x := x digitValue) >= 0 and: [ x < base ] ] ]
 		whileTrue: [ 
-			number := base * number + stream next digitValue.
-			power := power * base ].
+			number := base * number + x.
+			power := power * base.
+			stream next ].
 	^ number / power

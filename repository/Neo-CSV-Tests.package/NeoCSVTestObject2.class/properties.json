@@ -1,14 +1,11 @@
 {
-	"category" : "Neo-CSV-Tests",
-	"classinstvars" : [
-		 ],
-	"classvars" : [
-		 ],
 	"commentStamp" : "SvenVanCaekenberghe 11/21/2016 11:28",
-	"instvars" : [
-		 ],
-	"name" : "NeoCSVTestObject2",
-	"pools" : [
-		 ],
 	"super" : "NeoCSVTestObject",
-	"type" : "normal" }
+	"category" : "Neo-CSV-Tests",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [ ],
+	"name" : "NeoCSVTestObject2",
+	"type" : "normal"
+}

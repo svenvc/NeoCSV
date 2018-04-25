@@ -1,17 +1,23 @@
 {
-	"class" : {
-		"on:" : "SvenVanCaekenberghe 12/2/2012 13:31",
-		"parse:" : "SvenVanCaekenberghe 12/2/2012 13:35",
-		"parse:base:" : "SvenVanCaekenberghe 12/2/2012 13:51",
-		"parse:base:ifFail:" : "SvenVanCaekenberghe 12/2/2012 17:43",
-		"parse:ifFail:" : "SvenVanCaekenberghe 12/2/2012 17:43" },
 	"instance" : {
-		"base:" : "SvenVanCaekenberghe 12/2/2012 13:44",
-		"consumeWhitespace" : "SvenVanCaekenberghe 12/2/2012 17:30",
-		"initialize" : "SvenVanCaekenberghe 12/2/2012 13:49",
 		"next" : "SvenVanCaekenberghe 12/2/2012 13:31",
+		"parseNumberInteger" : "SvenVanCaekenberghe 6/22/2017 11:21",
+		"parseNumberExponent" : "SvenVanCaekenberghe 6/22/2017 11:17",
+		"base:" : "SvenVanCaekenberghe 12/2/2012 13:44",
 		"on:" : "SvenVanCaekenberghe 12/2/2012 13:43",
-		"parseNumber" : "SvenVanCaekenberghe 12/3/2012 11:00",
-		"parseNumberExponent" : "SvenVanCaekenberghe 12/2/2012 20:06",
-		"parseNumberFraction" : "SvenVanCaekenberghe 12/2/2012 20:06",
-		"parseNumberInteger" : "SvenVanCaekenberghe 12/2/2012 20:06" } }
+		"atEnd" : "SvenVanCaekenberghe 6/22/2017 11:24",
+		"parseNumberFraction" : "SvenVanCaekenberghe 6/22/2017 11:18",
+		"initialize" : "SvenVanCaekenberghe 4/25/2018 13:26",
+		"parseNumber" : "SvenVanCaekenberghe 4/25/2018 13:26",
+		"radixPoint:" : "SvenVanCaekenberghe 4/25/2018 13:26",
+		"consumeWhitespace" : "SvenVanCaekenberghe 12/2/2012 17:30",
+		"failIfNotAtEnd" : "SvenVanCaekenberghe 6/22/2017 11:26"
+	},
+	"class" : {
+		"parse:base:ifFail:" : "SvenVanCaekenberghe 12/2/2012 17:43",
+		"on:" : "SvenVanCaekenberghe 6/22/2017 11:31",
+		"parse:base:" : "SvenVanCaekenberghe 6/22/2017 11:31",
+		"parse:" : "SvenVanCaekenberghe 6/22/2017 11:31",
+		"parse:ifFail:" : "SvenVanCaekenberghe 12/2/2012 17:43"
+	}
+}

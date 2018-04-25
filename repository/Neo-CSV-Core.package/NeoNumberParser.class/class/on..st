@@ -1,5 +1,9 @@
 instance creation
-on: readStream
+on: stringOrStream
+	| stream |
+	stream := stringOrStream isString
+		ifTrue: [ stringOrStream readStream ]
+		ifFalse: [ stringOrStream ].
 	^ self new
-		on: readStream;
+		on: stream;
 		yourself

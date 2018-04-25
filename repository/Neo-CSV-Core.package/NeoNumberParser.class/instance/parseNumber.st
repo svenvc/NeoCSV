@@ -3,7 +3,7 @@ parseNumber
 	| negated number |
 	negated := stream peekFor: $-.
 	number := self parseNumberInteger.
-	(stream peekFor: $.)
+	(stream peekFor: radixPoint)
 		ifTrue: [ number := number + self parseNumberFraction ].
 	((stream peekFor: $e) or: [ stream peekFor: $E ])
 		ifTrue: [ number := number * self parseNumberExponent ].
