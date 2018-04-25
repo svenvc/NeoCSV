@@ -25,6 +25,7 @@
 		"testReadIntegersReadingHeaderAfterFieldDefinitions" : "SvenVanCaekenberghe 12/11/2013 20:43",
 		"testReadTestsObjects" : "SvenVanCaekenberghe 5/5/2013 12:15",
 		"testReadTestsObjectsUsingBlockAccessors" : "SvenVanCaekenberghe 5/13/2013 12:51",
+		"testReadTestsObjectsWithEmptyFieldValue" : "SvenVanCaekenberghe 11/21/2016 11:37",
 		"testReadTestsObjectsWithIgnoredField" : "SvenVanCaekenberghe 5/5/2013 13:09",
 		"testReadWithIgnoredField" : "SvenVanCaekenberghe 5/5/2013 14:20",
 		"testSimpleCrLfQuoted" : "SvenVanCaekenberghe 6/17/2012 13:53",
