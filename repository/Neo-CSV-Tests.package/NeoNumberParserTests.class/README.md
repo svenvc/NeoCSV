@@ -1,1 +1,0 @@
-I am NeoNumberParserTests the unit test suite for NeoNumberParser.
