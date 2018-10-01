@@ -1,0 +1,11 @@
+{
+	"commentStamp" : "SvenVanCaekenberghe 10/1/2018 17:10",
+	"super" : "BaselineOf",
+	"category" : "BaselineOfNeoCSV",
+	"classinstvars" : [ ],
+	"pools" : [ ],
+	"classvars" : [ ],
+	"instvars" : [ ],
+	"name" : "BaselineOfNeoCSV",
+	"type" : "normal"
+}
