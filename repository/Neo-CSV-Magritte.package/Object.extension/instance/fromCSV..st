@@ -7,7 +7,7 @@ fromCSV: file
 	fields := self new magritteDescription children.
 	header do: [ :h | 
 		fields
-			detect: [ :f | (f propertyAt: #csvFieldName) = h asString trimmed ]
+			detect: [ :f | f csvFieldName = h asString trimmed ]
 			ifFound: [ :e | reader addFieldDescribedBy: e ]
 			ifNone: [ reader addIgnoredField ] ].
 	^ reader upToEnd

@@ -1,7 +1,7 @@
 *Neo-CSV-Magritte
 fromCSVStream: aStream
 	| reader fields header |
-	reader := NeoCSVReader on: aStream.
+	reader := self neoCSVReaderClass on: aStream.
 	header := reader readHeader.
 	reader recordClass: self.
 	fields := self new magritteDescription children.
