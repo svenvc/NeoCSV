@@ -1,13 +1,12 @@
 Extension { #name : #NeoCSVReader }
 
 { #category : #'*Neo-CSV-Magritte' }
-NeoCSVReader >> addFieldDescribedBy: aDescription [ 
+NeoCSVReader >> addFieldDescribedByMagritte: aDescription [ 
 
 	| converter |
 	converter := aDescription 
 		propertyAt: #csvReader
-		ifPresent: [ :c | [ :trimmed | c value: trimmed ] ]
-		ifAbsent: [ [ :trimmed | aDescription fromString: trimmed ] ].
+		ifPresent: [ :c | [ :trimmed | c value: trimmed ] ].
 				
 	self 
 		addField: [ :obj :value | aDescription accessor write: value to: obj ] 
