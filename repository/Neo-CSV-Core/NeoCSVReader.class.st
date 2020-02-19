@@ -428,7 +428,7 @@ NeoCSVReader >> readFirstRecord [
 	when there is no field count, to obtain a field count based on the first record"
 	
 	^ recordClass streamContents: [ :stream |
-		[ self atEnd or: [ self readEndOfLine ] ]
+		[ self readAtEndOrEndOfLine ]
 			whileFalse: [ 
 				stream nextPut: self readField.
 				(self readSeparator and: [ self atEnd or: [ self peekEndOfLine ] ])
@@ -443,7 +443,7 @@ NeoCSVReader >> readHeader [
 
 	| names |
 	names := Array streamContents: [ :out |
-		 [ self atEnd or: [ self readEndOfLine ] ]
+		 [ self readAtEndOrEndOfLine ]
 			whileFalse: [ 
 				out nextPut: self readField.
 				(self readSeparator and: [ self atEnd or: [ self peekEndOfLine ] ])
@@ -598,6 +598,22 @@ NeoCSVReader >> separator: character [
 	
 	self assert: character isCharacter.
 	separator := character 
+]
+
+{ #category : #accessing }
+NeoCSVReader >> skip [
+	"Skip one record by reading until end of line.
+	This is faster than #next and has no side effects."
+	
+	[ self readAtEndOrEndOfLine ] whileFalse: [ self nextChar ]
+]
+
+{ #category : #convenience }
+NeoCSVReader >> skip: count [
+	"Skip count records by reading until end of line.
+	This is faster than #next and has no side effects."
+
+	count timesRepeat: [ self skip ]
 ]
 
 { #category : #convenience }
