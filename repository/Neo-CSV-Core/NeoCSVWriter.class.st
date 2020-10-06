@@ -344,7 +344,7 @@ NeoCSVWriter >> writeHeader: fieldNames [
 	This should normally be called only at the beginning and only once."
 	
 	fieldNames 
-		do: [ :each | self writeQuotedField: each ]
+		do: [ :each | self writeField: each ]
 		separatedBy: [ self writeSeparator ].
 	self writeEndOfLine
 ]
