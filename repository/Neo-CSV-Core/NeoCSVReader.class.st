@@ -29,7 +29,7 @@ Class {
 		'fieldAccessors',
 		'emptyFieldValue'
 	],
-	#category : 'Neo-CSV-Core'
+	#category : #'Neo-CSV-Core'
 }
 
 { #category : #'instance creation' }
@@ -259,6 +259,15 @@ NeoCSVReader >> close [
 	readStream ifNotNil: [
 		readStream close.
 		readStream := nil ]
+]
+
+{ #category : #'initialize-release' }
+NeoCSVReader >> dictionaryRecordsWithKeys: aCollection [
+	"Motivation: when you don't want to bother creating a class 'just' to represent a record, but need to do more processing than is available built-in. For example, a record represents multiple objects, or certain columns must be combined into one object field.
+	
+	aCollection - should probably be the headers of the CSV being read e.g. `reader dictionaryRecordsWithKeys: reader readHeader`. The reason it's passed in as an argument is to allow handling of more complex headers e.g. including blank rows"
+	self recordClass: Dictionary.
+	aCollection do: [ :key | self addField: [ :dict :val | dict at: key put: val ] ]
 ]
 
 { #category : #accessing }
