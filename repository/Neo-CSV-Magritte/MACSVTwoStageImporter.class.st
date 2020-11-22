@@ -1,6 +1,6 @@
 Class {
 	#name : #MACSVTwoStageImporter,
-	#superclass : #MACSVImportStrategy,
+	#superclass : #MACSVImporter,
 	#category : #'Neo-CSV-Magritte-Neo-CSV-Magritte'
 }
 
@@ -10,8 +10,9 @@ MACSVTwoStageImporter >> convertToDomainObjects: aCollectionOfDictionaries [
 ]
 
 { #category : #accessing }
-MACSVTwoStageImporter >> import [
+MACSVTwoStageImporter >> importStream: aStream [
 	| rows |
+	self stream: aStream.
 	rows := self readInput.
 	^ self convertToDomainObjects: rows
 ]
