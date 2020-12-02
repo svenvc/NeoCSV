@@ -28,9 +28,7 @@ MACSVTwoStageImporter >> initializeDomainObject: anObject fromRecord: aDictionar
 				stringValue := aDictionary at: fieldName.
 				self flag: 'This next part looks very memento-like'.
 				stringValue ifNotNil: [ 
-					| parsableString |
-					parsableString := stringValue reject: [ :c | c = $, ].
-					value := desc fromString: parsableString.
+					value := desc csvReader value: stringValue.
 					desc write: value to: anObject ] ] ].
 	^ anObject
 ]

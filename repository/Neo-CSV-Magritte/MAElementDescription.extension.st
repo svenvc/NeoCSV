@@ -12,7 +12,9 @@ MAElementDescription >> csvFieldName: aString [
 
 { #category : #'*Neo-CSV-Magritte' }
 MAElementDescription >> csvReader [
-	^ self propertyAt: #csvReader ifAbsent: [ [ :trimmed | self fromString: trimmed ] ]
+	| default |
+	default := [ :trimmed | self fromString: trimmed ].
+	^ self propertyAt: #csvReader ifAbsent: [ default ]
 ]
 
 { #category : #'*Neo-CSV-Magritte' }
