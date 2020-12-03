@@ -7,7 +7,7 @@ Class {
 		'recordClass',
 		'stream'
 	],
-	#category : #'Neo-CSV-Magritte'
+	#category : #'Neo-CSV-Magritte-Visitors'
 }
 
 { #category : #accessing }
