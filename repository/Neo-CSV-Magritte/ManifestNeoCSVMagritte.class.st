@@ -7,28 +7,24 @@
 
 Example:
 ```smalltalk
-MyDomainClass>>#descriptionPhone
+MyPerson>>#descriptionPhone
 	<magritteDescription>
-	^ MAStringDescription new
+	^ MANumberDescription new
 		accessor: #phone;
 		csvFieldName: 'Phone';
-		csvReader: [ :s | s select: #isDigit ];
+		csvReader: [ :s | (s select: #isDigit) asNumber ];
 		yourself
 ```
 
 ### 2. Read a CSV File
-- The main entry point is `MyDomainClass class>>#fromCSV: file`.
-- For exotic headers (i.e. not a single line with field names), override `MyDomainClass class>>#readCSVHeaderWith:`. You may for example want to skip irrevelant/blank lines).
+- The main entry point is `MyDomainClass class>>#maCSVImporter: aVisitorClass`.
+- The header must be a single line with field names. You may manually skip leading irrevelant/blank lines.
 
 Example:
 ```smalltalk
-file := self myFolder / 'myfile.csv'.
-collectionOfMyDomainObjects := self fromCSV: file
-```
-where:
-```smalltalk
-MyDomainClass class>>#readCSVHeaderWith: reader
-	^ reader next; next; readHeader
+file :=  self myFolder / 'my_contacts.csv'.
+importer :=  MyPerson maCSVImporter: MACSVImporter.
+collectionOfMyDomainObjects :=  importer importFile: file
 ```
 "
 Class {
