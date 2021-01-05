@@ -27,9 +27,10 @@ Class {
 		'recordClass',
 		'recordClassIsIndexable',
 		'fieldAccessors',
-		'emptyFieldValue'
+		'emptyFieldValue',
+		'strict'
 	],
-	#category : 'Neo-CSV-Core'
+	#category : #'Neo-CSV-Core'
 }
 
 { #category : #'instance creation' }
@@ -180,7 +181,7 @@ NeoCSVReader >> addIgnoredField [
 	self addFieldAccessor: nil
 ]
 
-{ #category : #'initialize-release' }
+{ #category : #convenience }
 NeoCSVReader >> addIgnoredFields: count [
 	"Add a count of consecutive ignored fields to receiver."
 
@@ -255,6 +256,13 @@ NeoCSVReader >> atEnd [
 ]
 
 { #category : #'initialize-release' }
+NeoCSVReader >> beStrict [
+	"Configure me to signal errors when the input does not match my field configration"
+	
+	strict := true
+]
+
+{ #category : #'initialize-release' }
 NeoCSVReader >> close [
 	readStream ifNotNil: [
 		readStream close.
@@ -283,13 +291,30 @@ NeoCSVReader >> emptyFieldValue: object [
 ]
 
 { #category : #'initialize-release' }
-NeoCSVReader >> fieldCount: anObject [
+NeoCSVReader >> fieldCount: count [
 	"Set the field count up front.
 	This will be used when reading records as Arrays.
 	This instance variable will be set and used automatically based on the first record seen.
 	If set, the fieldAccessors collection defines (overrides) the fieldCount."
 
-	fieldCount := anObject
+	fieldCount := count
+]
+
+{ #category : #'private - reading' }
+NeoCSVReader >> handleEndOfRecord [
+	strict
+		ifTrue: [ 
+			self readAtEndOrEndOfLine 
+				ifFalse: [ self error: 'Excess fields for CSV input' ] ] 
+		ifFalse: [ self skip ]
+]
+
+{ #category : #'private - reading' }
+NeoCSVReader >> handleSeparator [
+	self readSeparator 
+		ifFalse: [ 
+			strict 
+				ifTrue: [ self error: 'Insufficient fields for CSV input' ] ]
 ]
 
 { #category : #'initialize-release' }
@@ -297,7 +322,8 @@ NeoCSVReader >> initialize [
 	super initialize.
 	recordClass := Array.
 	recordClassIsIndexable := true.
-	separator := $,
+	separator := $,.
+	strict := false
 ]
 
 { #category : #convenience }
@@ -415,14 +441,6 @@ NeoCSVReader >> readField [
 ]
 
 { #category : #'private - reading' }
-NeoCSVReader >> readFieldAndSeparator [
-	| field |
-	field := self readField.
-	self readSeparator.
-	^ field
-]
-
-{ #category : #'private - reading' }
 NeoCSVReader >> readFirstRecord [ 
 	"This is only used for array based records when there are no field accessors or 
 	when there is no field count, to obtain a field count based on the first record"
@@ -448,7 +466,7 @@ NeoCSVReader >> readHeader [
 				out nextPut: self readField.
 				(self readSeparator and: [ self atEnd or: [ self peekEndOfLine ] ])
 					ifTrue: [ out nextPut: emptyFieldValue ] ] ].
-	fieldCount := names size.
+	self fieldCount: names size.
 	^ names
 ]
 
@@ -459,18 +477,18 @@ NeoCSVReader >> readNextRecord [
 	fieldAccessors
 		ifNil: [ self readNextRecordWithoutFieldAccessors: record ]
 		ifNotNil: [ self readNextRecordWithFieldAccessors: record ].
-	self readAtEndOrEndOfLine.
+	self handleEndOfRecord.
 	^ record
 ]
 
 { #category : #'private - reading' }
 NeoCSVReader >> readNextRecordAsArray [
 	fieldAccessors ifNotNil: [ 
-		fieldCount := fieldAccessors count: [ :each | each notNil ] ].
+		self fieldCount: (fieldAccessors count: [ :each | each notNil ]) ].
 	^ fieldCount 
 		ifNil: [ | record |
 			record := self readFirstRecord.
-			fieldCount := record size.
+			self fieldCount: record size.
 			record ] 
 		ifNotNil: [
 			self readNextRecord ]
@@ -480,17 +498,19 @@ NeoCSVReader >> readNextRecordAsArray [
 NeoCSVReader >> readNextRecordAsObject [
 	| object |
 	object := recordClass new.
-	fieldAccessors do: [ :each | | rawValue |
-		rawValue := self readFieldAndSeparator.
-		"nil field accessors are used to ignore fields"
-		each 
-			ifNotNil: [  
-				rawValue = emptyFieldValue
-					ifTrue: [ 
-						emptyFieldValue = #passNil 
-							ifTrue: [ each value: object value: nil ] ]
-					ifFalse: [ each value: object value: rawValue ] ] ].
-	self readAtEndOrEndOfLine.
+	fieldAccessors 
+		do: [ :each | | rawValue |
+			rawValue := self readField.
+			"nil field accessors are used to ignore fields"
+			each 
+				ifNotNil: [  
+					rawValue = emptyFieldValue
+						ifTrue: [ 
+							emptyFieldValue = #passNil 
+								ifTrue: [ each value: object value: nil ] ]
+						ifFalse: [ each value: object value: rawValue ] ] ]
+		separatedBy: [ self handleSeparator ].
+	self handleEndOfRecord.
 	^ object
 ]
 
@@ -498,24 +518,27 @@ NeoCSVReader >> readNextRecordAsObject [
 NeoCSVReader >> readNextRecordWithFieldAccessors: record [
 	| fieldIndex |
 	fieldIndex := 1.
-	fieldAccessors do: [ :each | | rawValue |
-		rawValue := self readFieldAndSeparator.
-		"nil field accessors are used to ignore fields"
-		each
-			ifNotNil: [ 
-				rawValue = emptyFieldValue
-					ifTrue: [ 
-						emptyFieldValue = #passNil
-							ifTrue: [ record at: fieldIndex put: (each value: nil) ]
-							ifFalse: [ record at: fieldIndex put: emptyFieldValue ] ]
-					ifFalse: [ record at: fieldIndex put: (each value: rawValue) ].
-				fieldIndex := fieldIndex + 1 ] ]
+	fieldAccessors 
+		do: [ :each | | rawValue |
+			rawValue := self readField.
+			"nil field accessors are used to ignore fields"
+			each
+				ifNotNil: [ 
+					rawValue = emptyFieldValue
+						ifTrue: [ 
+							emptyFieldValue = #passNil
+								ifTrue: [ record at: fieldIndex put: (each value: nil) ]
+								ifFalse: [ record at: fieldIndex put: emptyFieldValue ] ]
+						ifFalse: [ record at: fieldIndex put: (each value: rawValue) ].
+					fieldIndex := fieldIndex + 1 ] ]
+		separatedBy: [ self handleSeparator ]
 ]
 
 { #category : #'private - reading' }
 NeoCSVReader >> readNextRecordWithoutFieldAccessors: record [
 	1 to: fieldCount do: [ :each |
-		record at: each put: self readFieldAndSeparator ]
+		record at: each put: self readField.
+		each = fieldCount ifFalse: [ self handleSeparator ] ]
 ]
 
 { #category : #private }

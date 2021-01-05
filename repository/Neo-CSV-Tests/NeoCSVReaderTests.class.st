@@ -9,6 +9,65 @@ Class {
 }
 
 { #category : #testing }
+NeoCSVReaderTests >> testAvailableAndDefinedFieldsMismatch [
+	| input |
+	input := 'foo,1\bar,2\foobar,3' withCRs.
+	"if we configure the reader for 1 field, the second one in the input should be ignored"
+	self
+		assert: ((NeoCSVReader on: input readStream) addField; upToEnd)
+		equals: #(('foo')('bar')('foobar')).
+	self
+		assert: ((NeoCSVReader on: input readStream) 
+							recordClass: Dictionary; 
+							addFieldAt: #one; 
+							upToEnd)
+		equals: { 
+						{ #one->'foo' } asDictionary. 
+						{ #one->'bar' } asDictionary. 
+						{ #one->'foobar' } asDictionary }.
+	"if we configure the reader for 3 fields, the last one should be nil"
+	self
+		assert: ((NeoCSVReader on: input readStream) addField; addIntegerField; addField; upToEnd)
+		equals: #(('foo' 1 nil)('bar' 2 nil)('foobar' 3 nil)).
+	"for dictionaries, it depends on the empty field value"
+	self
+		assert: ((NeoCSVReader on: input readStream) 
+							recordClass: Dictionary; 
+							addFieldAt: #one; 
+							addIntegerFieldAt: #two; 
+							addFieldAt: #three; 
+							upToEnd)
+		equals: { 
+						{ #one->'foo'. #two->1 } asDictionary. 
+						{ #one->'bar'. #two->2 } asDictionary. 
+						{ #one->'foobar'. #two->3 } asDictionary }.
+	self
+		assert: ((NeoCSVReader on: input readStream) 
+							recordClass: Dictionary;
+							emptyFieldValue: #passNil;
+							addFieldAt: #one; 
+							addIntegerFieldAt: #two; 
+							addFieldAt: #three; 
+							upToEnd)
+		equals: { 
+						{ #one->'foo'. #two->1. #three->nil } asDictionary. 
+						{ #one->'bar'. #two->2. #three->nil } asDictionary. 
+						{ #one->'foobar'. #two->3. #three->nil } asDictionary }.
+	
+
+]
+
+{ #category : #testing }
+NeoCSVReaderTests >> testConversionErrors [
+	self 
+		should: [ (NeoCSVReader on: 'a' readStream) addIntegerField; upToEnd ]
+		raise: Error.
+	self 
+		should: [ (NeoCSVReader on: 'a' readStream) addFloatField; upToEnd ]
+		raise: Error.
+]
+
+{ #category : #testing }
 NeoCSVReaderTests >> testEmbeddedQuotes [
 	self 
 		assert: (NeoCSVReader on: '1,"x""y""z",3' readStream) upToEnd
@@ -481,4 +540,27 @@ NeoCSVReaderTests >> testSkippingEmptyRecords [
 		emptyFieldValue: '';
 		select: [ :each | each notEmpty and: [ (each allSatisfy: #isEmpty) not ] ].
 	self assert: output equals: #(#('1' '2' '3') #('4' '5' '6') #('7' '8' '9'))
+]
+
+{ #category : #testing }
+NeoCSVReaderTests >> testStrictParsing [
+	{
+		'foo,1\bar,2\foobar,3' -> [ :reader | reader addField ]. 
+		'foo,1\bar,2\foobar,3' -> [ :reader | reader addField; addField; addField ]. 
+		'foo,1\bar,2\foobar,3' -> [ :reader | reader recordClass: Dictionary; addFieldAt: #a ]. 
+		'foo,1\bar,2\foobar,3' -> [ :reader | reader recordClass: Dictionary; addFieldAt: #a; addFieldAt: #b; addFieldAt: #c ].
+		'one\one,two' -> [ :reader | reader ]. 
+		'one,two\one' -> [ :reader | reader ].
+		'"foo",1\"missing quote,2\"foobar",3' -> [ :reader | reader ].
+		'"foo",1\missing quote,"2\"foobar",3' -> [ :reader | reader ].
+	} do: [ :specification | | inputString configurator reader |
+		inputString := specification key.
+		configurator := specification value.
+		reader := NeoCSVReader on: inputString withCRs readStream.
+		reader beStrict.
+		self 
+			should: [ 
+				configurator value: reader.
+				reader upToEnd ] 
+			raise: Error ]
 ]
