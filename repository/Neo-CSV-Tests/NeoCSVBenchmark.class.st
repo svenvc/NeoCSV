@@ -55,7 +55,7 @@ Class {
 
 { #category : #public }
 NeoCSVBenchmark >> cleanup [
-	self filename ensureDeleted
+	self filename ensureDelete
 	
 ]
 
