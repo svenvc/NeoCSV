@@ -266,7 +266,7 @@ NeoCSVReader >> beStrict [
 NeoCSVReader >> close [
 	readStream ifNotNil: [
 		readStream close.
-		readStream := nil ]
+		readStream := charBuffer := nil ]
 ]
 
 { #category : #accessing }
@@ -306,7 +306,7 @@ NeoCSVReader >> handleEndOfRecord [
 		ifTrue: [ 
 			self readAtEndOrEndOfLine 
 				ifFalse: [ self error: 'Excess fields for CSV input' ] ] 
-		ifFalse: [ self skip ]
+		ifFalse: [ self skipLine ]
 ]
 
 { #category : #'private - reading' }
@@ -445,7 +445,7 @@ NeoCSVReader >> readFirstRecord [
 	"This is only used for array based records when there are no field accessors or 
 	when there is no field count, to obtain a field count based on the first record"
 	
-	^ recordClass streamContents: [ :stream |
+	^ self recordClassStreamContents: [ :stream |
 		[ self readAtEndOrEndOfLine ]
 			whileFalse: [ 
 				stream nextPut: self readField.
@@ -473,7 +473,7 @@ NeoCSVReader >> readHeader [
 { #category : #'private - reading' }
 NeoCSVReader >> readNextRecord [
 	| record |
-	record := recordClass new: fieldCount.
+	record := self recordClassNew: fieldCount.
 	fieldAccessors
 		ifNil: [ self readNextRecordWithoutFieldAccessors: record ]
 		ifNotNil: [ self readNextRecordWithFieldAccessors: record ].
@@ -497,7 +497,7 @@ NeoCSVReader >> readNextRecordAsArray [
 { #category : #'private - reading' }
 NeoCSVReader >> readNextRecordAsObject [
 	| object |
-	object := recordClass new.
+	object := self recordClassNew.
 	fieldAccessors 
 		do: [ :each | | rawValue |
 			rawValue := self readField.
@@ -592,6 +592,27 @@ NeoCSVReader >> recordClassIsIndexable: boolean [
 	recordClassIsIndexable := boolean 
 ]
 
+{ #category : #private }
+NeoCSVReader >> recordClassNew [
+	^ recordClass new
+]
+
+{ #category : #private }
+NeoCSVReader >> recordClassNew: size [
+	^ recordClass new: size
+]
+
+{ #category : #private }
+NeoCSVReader >> recordClassStreamContents: block [
+	^ recordClass streamContents: block
+]
+
+{ #category : #'initialize-release' }
+NeoCSVReader >> resetStream [
+	charBuffer := nil.
+	readStream reset
+]
+
 { #category : #accessing }
 NeoCSVReader >> select: filter [
 	"Read and collect records that satisfy filter into an Array until there are none left.
@@ -625,18 +646,26 @@ NeoCSVReader >> separator: character [
 
 { #category : #accessing }
 NeoCSVReader >> skip [
-	"Skip one record by reading until end of line.
-	This is faster than #next and has no side effects."
-	
-	[ self readAtEndOrEndOfLine ] whileFalse: [ self nextChar ]
+	self skipRecord
 ]
 
 { #category : #convenience }
 NeoCSVReader >> skip: count [
-	"Skip count records by reading until end of line.
-	This is faster than #next and has no side effects."
+	"Skip count records by reading until end of line."
 
 	count timesRepeat: [ self skip ]
+]
+
+{ #category : #'private - reading' }
+NeoCSVReader >> skipField [
+	self peekQuote
+		ifTrue: [
+			self readQuote.
+			[ self atEnd or: [ self readEndOfQuotedField ] ]
+				whileFalse: [ self nextChar ] ]
+		ifFalse: [
+			[ self atEnd or: [ self peekSeparator or: [ self peekEndOfLine ] ] ]
+				whileFalse: [ self nextChar ] ]
 ]
 
 { #category : #convenience }
@@ -646,6 +675,25 @@ NeoCSVReader >> skipHeader [
 	This sets the fieldCount (but fieldAccessors overrides fieldCount)."
 
 	self readHeader
+]
+
+{ #category : #accessing }
+NeoCSVReader >> skipLine [
+	"Skip one (the current) record by reading until end of line.
+	This is fast and has no side effects but does not honor quoted newlines."
+	
+	[ self readAtEndOrEndOfLine ] whileFalse: [ self nextChar ]
+]
+
+{ #category : #accessing }
+NeoCSVReader >> skipRecord [
+	"Skip one (the current) record by reading fields until end of line.
+	This is fast, has no side effects and honors quoted newlines."
+	
+	[ self readAtEndOrEndOfLine ]
+		whileFalse: [
+			self skipField.
+			self readSeparator ]
 ]
 
 { #category : #private }
