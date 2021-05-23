@@ -6,6 +6,8 @@ NeoCSV is an elegant and efficient standalone Smalltalk framework to read and wr
 
 MIT Licensed.
 
+A chapter in the [Enterprise Pharo](https://books.pharo.org/enterprise-pharo/) book is a good introduction to [NeoCSV](https://ci.inria.fr/pharo-contribution/job/EnterprisePharoBook/lastSuccessfulBuild/artifact/book-result/NeoCSV/NeoCSV.html).
+
 Go ahead and read the [NeoCSV paper](https://github.com/svenvc/docs/blob/master/neo/neo-csv-paper.md).
 
 Basically, NeoCSV deals with a format that
