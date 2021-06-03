@@ -166,6 +166,15 @@ NeoCSVReader >> addFloatFieldRadixPointComma [
 ]
 
 { #category : #convenience }
+NeoCSVReader >> addFloatFieldRadixPointComma: accessor [
+	"Add a field for indexable records parsed as Float using a comma as radix point"
+
+	self 
+		addField: accessor 
+		converter: [ :string | (NeoNumberParser on: string) radixPoint: $, ; next ]
+]
+
+{ #category : #convenience }
 NeoCSVReader >> addFloatFieldRadixPointCommaAt: key [
 	"Add a field for key for #at:put: parsed as Float using a comma as radix point"
 
