@@ -1,13 +1,13 @@
-Extension { #name : #Object }
+Extension { #name : 'Object' }
 
-{ #category : #'*Neo-CSV-Magritte' }
+{ #category : '*Neo-CSV-Magritte' }
 Object class >> maCSVImporter: importerClass [
 	^ importerClass new
 		recordClass: self;
 		yourself.
 ]
 
-{ #category : #'*Neo-CSV-Magritte' }
+{ #category : '*Neo-CSV-Magritte' }
 Object class >> maGenerateFieldsFromCSVHeaders: aString [
 	"Given a class-side `#headers` message returning a tab-separated string (e.g. pasted from MS Excel), generate a field (i.e. constructor and accessors) for each token"
 	

@@ -1,1 +1,1 @@
-Package { #name : #'Neo-CSV-Magritte' }
+Package { #name : 'Neo-CSV-Magritte' }

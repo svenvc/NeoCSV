@@ -1,6 +1,6 @@
-Extension { #name : #NeoCSVReader }
+Extension { #name : 'NeoCSVReader' }
 
-{ #category : #'*Neo-CSV-Magritte' }
+{ #category : '*Neo-CSV-Magritte' }
 NeoCSVReader >> addFieldDescribedByMagritte: aDescription [ 
 
 	self 
