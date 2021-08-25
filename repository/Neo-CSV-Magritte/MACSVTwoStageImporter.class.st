@@ -1,23 +1,23 @@
 Class {
-	#name : #MACSVTwoStageImporter,
-	#superclass : #MACSVImporter,
-	#category : #'Neo-CSV-Magritte-Neo-CSV-Magritte'
+	#name : 'MACSVTwoStageImporter',
+	#superclass : 'MACSVImporter',
+	#category : 'Neo-CSV-Magritte-Neo-CSV-Magritte'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MACSVTwoStageImporter >> convertToDomainObjects: aCollectionOfDictionaries [
 	self subclassResponsibility
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MACSVTwoStageImporter >> importStream: aStream [
 	| rows |
-	self stream: aStream.
+	self reader on: aStream.
 	rows := self readInput.
 	^ self convertToDomainObjects: rows
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MACSVTwoStageImporter >> initializeDomainObject: anObject fromRecord: aDictionary [
 	"We needed an instance-side version because some objects may need configuration during instance creation"
 	anObject magritteDescription do: [ :desc | 
@@ -33,7 +33,7 @@ MACSVTwoStageImporter >> initializeDomainObject: anObject fromRecord: aDictionar
 	^ anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MACSVTwoStageImporter >> readInput [
 	^ self reader
 		emptyFieldValue: #passNil;

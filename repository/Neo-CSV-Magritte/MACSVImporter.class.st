@@ -1,27 +1,28 @@
 Class {
-	#name : #MACSVImporter,
-	#superclass : #Object,
+	#name : 'MACSVImporter',
+	#superclass : 'Object',
 	#instVars : [
 		'reader',
 		'readerClass',
 		'recordClass',
-		'stream'
+		'source'
 	],
-	#category : #'Neo-CSV-Magritte-Visitors'
+	#category : 'Neo-CSV-Magritte-Visitors'
 }
 
-{ #category : #accessing }
-MACSVImporter >> importFile: file [
-	
-	^ file readStreamDo: [ :str | self importStream: str ]
+{ #category : 'accessing' }
+MACSVImporter >> execute [
+	^ self source isStream
+		ifTrue: [ self importStream: self source ]
+		ifFalse: [ self source readStreamDo: [ :str | self importStream: str ] ]
 ]
 
-{ #category : #accessing }
+{ #category : 'private' }
 MACSVImporter >> importStream: aStream [
 	
 	| fields header |
-	self stream: aStream.
-	header := self reader readHeader.
+	self reader on: aStream.
+	header := self readHeader.
 	self reader recordClass: self recordClass.
 	fields := self recordClass new magritteDescription children.
 	header do: [ :h | 
@@ -32,37 +33,45 @@ MACSVImporter >> importStream: aStream [
 	^ self reader upToEnd "or do more processing e.g. `select: [ :record | record lastName isNotNil ]`"
 ]
 
-{ #category : #accessing }
-MACSVImporter >> reader [
-	^ reader ifNil: [ reader := self readerClass on: self stream ]
+{ #category : 'private' }
+MACSVImporter >> readHeader [
+	"For exotic headers (i.e. not a single line with field names), override this. For example, you may for example want to skip irrevelant/blank lines."
+	^ self reader readHeader
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
+MACSVImporter >> reader [
+	^ reader ifNil: [ reader := self readerClass new ]
+]
+
+{ #category : 'accessing' }
 MACSVImporter >> readerClass [
 	^ readerClass ifNil: [ NeoCSVReader ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MACSVImporter >> readerClass: aClass [
 	readerClass := aClass
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MACSVImporter >> recordClass [
 	^ recordClass
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MACSVImporter >> recordClass: aClass [
 	recordClass := aClass
 ]
 
-{ #category : #accessing }
-MACSVImporter >> stream [
-	^ stream
+{ #category : 'accessing' }
+MACSVImporter >> source [
+
+	^ source
 ]
 
-{ #category : #accessing }
-MACSVImporter >> stream: aStream [ 
-	stream := aStream
+{ #category : 'accessing' }
+MACSVImporter >> source: aFileOrStream [
+
+	source := aFileOrStream
 ]
