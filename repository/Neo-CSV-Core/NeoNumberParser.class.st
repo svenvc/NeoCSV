@@ -34,9 +34,10 @@ Class {
 	#instVars : [
 		'stream',
 		'base',
-		'radixPoint'
+		'radixPoint',
+		'digitGroupSeparator'
 	],
-	#category : 'Neo-CSV-Core'
+	#category : #'Neo-CSV-Core'
 }
 
 { #category : #'instance creation' }
@@ -83,6 +84,9 @@ NeoNumberParser >> atEnd [
 
 { #category : #'initialize-release' }
 NeoNumberParser >> base: integer [
+	"Set the base of the numbers that I parse to integer.
+	The default is 10"
+	
 	self assert: (integer between: 2 and: 36) description: 'Number base must be between 2 and 36'.
 	base := integer
 ]
@@ -94,6 +98,32 @@ NeoNumberParser >> consumeWhitespace [
 	[ stream atEnd not and: [ stream peek isSeparator ] ] 
 		whileTrue: [ stream next ]
 
+]
+
+{ #category : #'initialize-release' }
+NeoNumberParser >> digitGroupSeparator: separatorCharacter [
+	"Set the digit group separator to separatorCharacter.
+	The are skipped while parsing digit characters.
+	The default is nil (nothing being skipped)"
+	
+	digitGroupSeparator := separatorCharacter 
+]
+
+{ #category : #parsing }
+NeoNumberParser >> digitsDo: oneArgumentBlock [
+	"Evaluate oneArgumentBlock with integer digit values from the input stream,
+	while the stream is not at end and the digit value is within [0, base).
+	Skip digit group separator characters."
+	
+	| character digitValue |
+	[ (character := stream peek) notNil ]
+		whileTrue: [ 
+			character = digitGroupSeparator
+				ifFalse: [ 
+					((digitValue := character digitValue) >= 0 and: [ digitValue < base ])
+						ifTrue: [ oneArgumentBlock value: digitValue ]
+						ifFalse: [ ^ self ] ].
+			stream next ]
 ]
 
 { #category : #parsing }
@@ -135,14 +165,12 @@ NeoNumberParser >> parseNumber [
 
 { #category : #parsing }
 NeoNumberParser >> parseNumberExponent [
-	| number negated x |
+	| number negated |
 	number := 0.
 	(negated := stream peekFor: $-)
 		ifFalse: [ stream peekFor: $+ ].
-	[ (x := stream peek) notNil and: [ (x := x digitValue) >= 0 and: [ x < base ] ] ]
-		whileTrue: [ 
-			number := base * number + x. 
-			stream next ].
+	self digitsDo: [ :x | 
+		number := base * number + x ].
 	negated
 		ifTrue: [ number := number negated ].
 	^ base raisedTo: number
@@ -150,27 +178,23 @@ NeoNumberParser >> parseNumberExponent [
 
 { #category : #parsing }
 NeoNumberParser >> parseNumberFraction [
-	| number power x |
+	| number power |
 	number := 0.
 	power := 1.0.
-	[ (x := stream peek) notNil and: [ (x := x digitValue) >= 0 and: [ x < base ] ] ]
-		whileTrue: [ 
-			number := base * number + x.
-			power := power * base.
-			stream next ].
+	self digitsDo: [ :x | 
+		number := base * number + x.
+		power := power * base ].
 	^ number / power
 ]
 
 { #category : #parsing }
 NeoNumberParser >> parseNumberInteger [
-	| number x found |
+	| number found |
 	number := 0.
 	found := false.
-	[ (x := stream peek) notNil and: [ (x := x digitValue) >= 0 and: [ x < base ] ] ]
-		whileTrue: [ 
-			found := true.
-			number := base * number + x.
-			stream next ].
+	self digitsDo: [ :x | 
+		found := true.
+		number := base * number + x ].
 	found 
 		ifFalse: [ self error: 'Integer digit expected' ].
 	^ number
@@ -178,5 +202,8 @@ NeoNumberParser >> parseNumberInteger [
 
 { #category : #'initialize-release' }
 NeoNumberParser >> radixPoint: radixCharacter [
+	"Set the radix of the numbers that I parse to radixCharacter.
+	The default is $."
+	
 	radixPoint := radixCharacter 
 ]
