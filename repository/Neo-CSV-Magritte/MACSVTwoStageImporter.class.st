@@ -12,7 +12,7 @@ MACSVTwoStageImporter >> convertToDomainObjects: aCollectionOfDictionaries [
 { #category : #accessing }
 MACSVTwoStageImporter >> importStream: aStream [
 	| rows |
-	self stream: aStream.
+	self reader on: aStream.
 	rows := self readInput.
 	^ self convertToDomainObjects: rows
 ]

@@ -5,23 +5,24 @@ Class {
 		'reader',
 		'readerClass',
 		'recordClass',
-		'stream'
+		'source'
 	],
-	#category : #'Neo-CSV-Magritte-Visitors'
+	#category : 'Neo-CSV-Magritte-Visitors'
 }
 
 { #category : #accessing }
-MACSVImporter >> importFile: file [
-	
-	^ file readStreamDo: [ :str | self importStream: str ]
+MACSVImporter >> execute [
+	^ self source isStream
+		ifTrue: [ self importStream: self source ]
+		ifFalse: [ self source readStreamDo: [ :str | self importStream: str ] ]
 ]
 
-{ #category : #accessing }
+{ #category : #private }
 MACSVImporter >> importStream: aStream [
 	
 	| fields header |
-	self stream: aStream.
-	header := self reader readHeader.
+	self reader on: aStream.
+	header := self readHeader.
 	self reader recordClass: self recordClass.
 	fields := self recordClass new magritteDescription children.
 	header do: [ :h | 
@@ -32,9 +33,15 @@ MACSVImporter >> importStream: aStream [
 	^ self reader upToEnd "or do more processing e.g. `select: [ :record | record lastName isNotNil ]`"
 ]
 
+{ #category : #private }
+MACSVImporter >> readHeader [
+	"For exotic headers (i.e. not a single line with field names), override this. For example, you may for example want to skip irrevelant/blank lines."
+	^ self reader readHeader
+]
+
 { #category : #accessing }
 MACSVImporter >> reader [
-	^ reader ifNil: [ reader := self readerClass on: self stream ]
+	^ reader ifNil: [ reader := self readerClass new ]
 ]
 
 { #category : #accessing }
@@ -58,11 +65,13 @@ MACSVImporter >> recordClass: aClass [
 ]
 
 { #category : #accessing }
-MACSVImporter >> stream [
-	^ stream
+MACSVImporter >> source [
+
+	^ source
 ]
 
 { #category : #accessing }
-MACSVImporter >> stream: aStream [ 
-	stream := aStream
+MACSVImporter >> source: aFileOrStream [
+
+	source := aFileOrStream
 ]

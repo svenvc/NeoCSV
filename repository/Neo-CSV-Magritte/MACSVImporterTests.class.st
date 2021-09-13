@@ -11,7 +11,9 @@ Class {
 
 { #category : #'as yet unclassified' }
 MACSVImporterTests >> readInput: aString [ 
-	objects :=  importer importStream: aString readStream
+	objects :=  importer 
+		source: aString readStream;
+		execute
 ]
 
 { #category : #running }

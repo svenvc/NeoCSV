@@ -18,17 +18,19 @@ MyPerson>>#descriptionPhone
 
 ### 2. Read a CSV File
 - The main entry point is `MyDomainClass class>>#maCSVImporter: aVisitorClass`.
-- The header must be a single line with field names. You may manually skip leading irrevelant/blank lines.
+- The header must be a single line with field names. See the {{gtMethod:MACSVImporter>>#readHeader}} hook, provided to e.g. manually skip leading irrevelant/blank lines.
 
 Example:
 ```smalltalk
 file :=  self myFolder / 'my_contacts.csv'.
 importer :=  MyPerson maCSVImporter: MACSVImporter.
-collectionOfMyDomainObjects :=  importer importFile: file
+collectionOfMyDomainObjects :=  importer 
+	source: file;
+	execute.
 ```
 "
 Class {
 	#name : #ManifestNeoCSVMagritte,
 	#superclass : #PackageManifest,
-	#category : #'Neo-CSV-Magritte-Manifest'
+	#category : 'Neo-CSV-Magritte-Manifest'
 }
