@@ -15,21 +15,21 @@ NeoCSVWriterTests >> testEmptyFieldValue [
 					(NeoCSVWriter on: stream)
 						nextPut: #(one two three);
 						nextPutAll: #( (1 2 nil) (4 nil 6) (nil 8 9)) ])
-		equals: (String crlf join: #( '"one","two","three"' '"1","2",""' '"4","","6"' '"","8","9"' '')).
+		equals: (OSPlatform current lineEnding join: #( '"one","two","three"' '"1","2",""' '"4","","6"' '"","8","9"' '')).
 	self
 		assert: (String streamContents: [ :stream |
 					(NeoCSVWriter on: stream)
 						emptyFieldValue: #empty;
 						nextPut: #(one two three);
 						nextPutAll: #( (1 2 empty) (4 empty 6) (empty 8 9)) ])
-		equals: (String crlf join: #( '"one","two","three"' '"1","2",""' '"4","","6"' '"","8","9"' '')).
+		equals: (OSPlatform current lineEnding join: #( '"one","two","three"' '"1","2",""' '"4","","6"' '"","8","9"' '')).
 	self
 		assert: (String streamContents: [ :stream |
 					(NeoCSVWriter on: stream)
 						emptyFieldValue: Object new;
 						nextPut: #(one two three);
 						nextPutAll: #( (1 2 nil) (4 nil 6) (nil 8 9)) ])
-		equals: (String crlf join: #( '"one","two","three"' '"1","2","nil"' '"4","nil","6"' '"nil","8","9"' ''))
+		equals: (OSPlatform current lineEnding join: #( '"one","two","three"' '"1","2","nil"' '"4","nil","6"' '"nil","8","9"' ''))
 ]
 
 { #category : #testing }
@@ -43,7 +43,7 @@ NeoCSVWriterTests >> testObjectFieldsTestObjects [
 							NeoCSVTestObject example. 
 							NeoCSVTestObject example. 
 							NeoCSVTestObject example } ])
-		equals: (String crlf join: #( '"x","y","z"' '100,200,300' '100,200,300' '100,200,300' ''))
+		equals: (OSPlatform current lineEnding join: #( '"x","y","z"' '100,200,300' '100,200,300' '100,200,300' ''))
 ]
 
 { #category : #testing }
@@ -62,7 +62,7 @@ NeoCSVWriterTests >> testObjectFieldsTestObjectsExtra [
 							NeoCSVTestObject example. 
 							NeoCSVTestObject example. 
 							NeoCSVTestObject example } ])
-		equals: (String crlf join: #( 
+		equals: (OSPlatform current lineEnding join: #( 
 					'x,empty,y,constant,z' 
 					'100,,200,X,300' 
 					'100,,200,X,300' 
@@ -83,7 +83,7 @@ NeoCSVWriterTests >> testObjectFieldsTestObjectsUsingBlockAccessors [
 							NeoCSVTestObject example. 
 							NeoCSVTestObject example. 
 							NeoCSVTestObject example } ])
-		equals: (String crlf join: #( '"x","y","z"' '100,200,300' '100,200,300' '100,200,300' ''))
+		equals: (OSPlatform current lineEnding join: #( '"x","y","z"' '100,200,300' '100,200,300' '100,200,300' ''))
 ]
 
 { #category : #testing }
@@ -98,8 +98,8 @@ NeoCSVWriterTests >> testOptionalQuotedFields [
 							{'one'.
 							't,wo'.
 							't"hree'.
-							'fo' , String crlf , 'ur'} ])
-		equals: 'one,"t,wo","t""hree","fo' , String crlf , 'ur"', String crlf
+							'fo' , OSPlatform current lineEnding , 'ur'} ])
+		equals: 'one,"t,wo","t""hree","fo' , OSPlatform current lineEnding , 'ur"', OSPlatform current lineEnding
 ]
 
 { #category : #testing }
@@ -113,7 +113,7 @@ NeoCSVWriterTests >> testRawFieldsDictionaries [
 							Dictionary newFromPairs: #(x 100 y 200 z 300).
 							Dictionary newFromPairs: #(x 400 y 500 z 600). 
 							Dictionary newFromPairs: #(x 700 y 800 z 900) } ])
-		equals: (String crlf join: #( '"x","y","z"' '100,200,300' '400,500,600' '700,800,900' ''))
+		equals: (OSPlatform current lineEnding join: #( '"x","y","z"' '100,200,300' '400,500,600' '700,800,900' ''))
 ]
 
 { #category : #testing }
@@ -127,7 +127,7 @@ NeoCSVWriterTests >> testRawFieldsTestObjects [
 							NeoCSVTestObject example. 
 							NeoCSVTestObject example. 
 							NeoCSVTestObject example } ])
-		equals: (String crlf join: #( '"x","y","z"' '100,200,300' '100,200,300' '100,200,300' ''))
+		equals: (OSPlatform current lineEnding join: #( '"x","y","z"' '100,200,300' '100,200,300' '100,200,300' ''))
 ]
 
 { #category : #testing }
@@ -137,7 +137,7 @@ NeoCSVWriterTests >> testSimple [
 					(NeoCSVWriter on: stream)
 						nextPut: #(one two three);
 						nextPutAll: #( (1 2 3) (4 5 6) (7 8 9)) ])
-		equals: (String crlf join: #( '"one","two","three"' '"1","2","3"' '"4","5","6"' '"7","8","9"' ''))
+		equals: (OSPlatform current lineEnding join: #( '"one","two","three"' '"1","2","3"' '"4","5","6"' '"7","8","9"' ''))
 ]
 
 { #category : #testing }
@@ -148,7 +148,7 @@ NeoCSVWriterTests >> testSimpleOptionalQuoted [
 						fieldWriter: #optionalQuoted;
 						nextPut: #(one two 'thr,ee');
 						nextPutAll: #( (1 2 3) (4 5 6) (7 8 9)) ])
-		equals: (String crlf join: #( 'one,two,"thr,ee"' '1,2,3' '4,5,6' '7,8,9' ''))
+		equals: (OSPlatform current lineEnding join: #( 'one,two,"thr,ee"' '1,2,3' '4,5,6' '7,8,9' ''))
 ]
 
 { #category : #testing }
@@ -159,7 +159,7 @@ NeoCSVWriterTests >> testSimpleRaw [
 						fieldWriter: #raw;
 						nextPut: #(one two three);
 						nextPutAll: #( (1 2 3) (4 5 6) (7 8 9)) ])
-		equals: (String crlf join: #( 'one,two,three' '1,2,3' '4,5,6' '7,8,9' ''))
+		equals: (OSPlatform current lineEnding join: #( 'one,two,three' '1,2,3' '4,5,6' '7,8,9' ''))
 ]
 
 { #category : #testing }
@@ -169,7 +169,7 @@ NeoCSVWriterTests >> testWideOptionalQuoted [
 			(NeoCSVWriter on: out) 
 				fieldWriter: #optionalQuoted; 
 				nextPut: { 1. 'foo "1" ', Character euro asString. true} ])
-		equals: ('1,"foo ""1"" ', Character euro asString, '",true', String crlf)
+		equals: ('1,"foo ""1"" ', Character euro asString, '",true', OSPlatform current lineEnding)
 ]
 
 { #category : #testing }
@@ -178,7 +178,7 @@ NeoCSVWriterTests >> testWriteEmbeddedQuote [
 	header := String streamContents: [ :out |
 		(NeoCSVWriter on: out)
 			nextPut: #(foo 'x"y"z') ].
-	self assert: header equals: '"foo","x""y""z"', String crlf
+	self assert: header equals: '"foo","x""y""z"', OSPlatform current lineEnding
 ]
 
 { #category : #testing }
@@ -187,5 +187,5 @@ NeoCSVWriterTests >> testWriteHeader [
 	header := String streamContents: [ :out |
 		(NeoCSVWriter on: out)
 			writeHeader: #(foo bar) ].
-	self assert: header equals: '"foo","bar"', String crlf
+	self assert: header equals: '"foo","bar"', OSPlatform current lineEnding
 ]

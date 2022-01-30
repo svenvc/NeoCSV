@@ -247,7 +247,7 @@ NeoCSVWriter >> flush [
 { #category : #'initialize-release' }
 NeoCSVWriter >> initialize [ 
 	super initialize.
-	lineEnd := String crlf.
+	lineEnd := OSPlatform current lineEnding.
 	separator := $, .
 	fieldWriter := #writeQuotedField: 
 
