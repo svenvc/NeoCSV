@@ -278,7 +278,17 @@ NeoCSVReader >> close [
 		readStream := charBuffer := nil ]
 ]
 
-{ #category : #accessing }
+{ #category : #enumerating }
+NeoCSVReader >> collect: block [
+	"Execute block for each record until I am at end, returning the results in an Array"
+	
+	^ Array streamContents: [ :out |
+			[ self atEnd ]
+				whileFalse: [ 
+					out nextPut: (block value: self next) ] ]
+]
+
+{ #category : #enumerating }
 NeoCSVReader >> do: block [
 	"Execute block for each record until I am at end."
 	
@@ -616,13 +626,33 @@ NeoCSVReader >> recordClassStreamContents: block [
 	^ recordClass streamContents: block
 ]
 
+{ #category : #enumerating }
+NeoCSVReader >> reject: filter [
+	"Read and collect records that do not satisfy filter into an Array until there are none left.
+	Return the array."
+
+	^ Array streamContents: [ :stream | 
+		self 
+			reject: filter 
+			thenDo: [ :each | stream nextPut: each ] ]
+]
+
+{ #category : #enumerating }
+NeoCSVReader >> reject: filter thenDo: block [
+	"Execute block for each record that does not satisfy filter until I am at end."
+
+	self do: [ :record |
+		(filter value: record)
+			ifFalse: [ block value: record ] ]
+]
+
 { #category : #'initialize-release' }
 NeoCSVReader >> resetStream [
 	charBuffer := nil.
 	readStream reset
 ]
 
-{ #category : #accessing }
+{ #category : #enumerating }
 NeoCSVReader >> select: filter [
 	"Read and collect records that satisfy filter into an Array until there are none left.
 	Return the array."
@@ -633,16 +663,13 @@ NeoCSVReader >> select: filter [
 			thenDo: [ :each | stream nextPut: each ] ]
 ]
 
-{ #category : #accessing }
+{ #category : #enumerating }
 NeoCSVReader >> select: filter thenDo: block [
 	"Execute block for each record that satisfies filter until I am at end."
 
-	[ self atEnd ]
-		whileFalse: [ 
-			| record |
-			record := self next.
-			(filter value: record)
-				ifTrue: [ block value: record ] ]
+	self do: [ :record |
+		(filter value: record)
+			ifTrue: [ block value: record ] ]
 ]
 
 { #category : #'initialize-release' }
