@@ -1,3 +1,10 @@
+"
+Sometimes, you just can't fully create your domain objects from CSV in one pass. For example:
+- Multiple rows combine into one object (`inject:into:` can be helpful here)
+- Multiple cells combine into one object field
+
+To handle such a case, subclass me and, at minimum, override `#convertToDomainObjects:`. See its comment for more info. Implementations of that method often utilize my `#initializeDomainObject:fromRecord:` helper method.
+"
 Class {
 	#name : #MACSVTwoStageImporter,
 	#superclass : #MACSVImporter,
@@ -6,6 +13,9 @@ Class {
 
 { #category : #accessing }
 MACSVTwoStageImporter >> convertToDomainObjects: aCollectionOfDictionaries [
+	"aCollectionOfDictionaries - the result of a naive processing of CSV
+	Return - a collection of domain objects"
+	
 	self subclassResponsibility
 ]
 
