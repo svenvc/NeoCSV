@@ -22,7 +22,7 @@ MACSVTwoStageImporter >> initializeDomainObject: anObject fromRecord: aDictionar
 	"We needed an instance-side version because some objects may need configuration during instance creation"
 	anObject magritteDescription do: [ :desc | 
 		desc
-			propertyAt: #csvFieldName
+			propertyAt: self fieldNamePropertyKey
 			ifPresent: [ :fieldName | 
 				| stringValue value |
 				stringValue := aDictionary at: fieldName.
