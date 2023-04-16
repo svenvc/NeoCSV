@@ -1,7 +1,7 @@
 Class {
 	#name : #MACSVTwoStageImporter,
 	#superclass : #MACSVImporter,
-	#category : #'Neo-CSV-Magritte-Neo-CSV-Magritte'
+	#category : #'Neo-CSV-Magritte-Visitors'
 }
 
 { #category : #accessing }
