@@ -24,6 +24,13 @@ MACSVImporter >> fieldNamePropertyKey [
 	^ #csvFieldName
 ]
 
+{ #category : #accessing }
+MACSVImporter >> fieldReaderPropertyKey [
+	"The property where the element description stores the field reader. Override to customize. See `MAElementDescription>>#csvReader:` method comment for more info"
+
+	^ #csvReader
+]
+
 { #category : #private }
 MACSVImporter >> importStream: aStream [
 	
@@ -39,7 +46,9 @@ MACSVImporter >> importStream: aStream [
 						propertyAt: self fieldNamePropertyKey 
 						ifPresent: [ :fieldName | fieldName = h asString trimmed ]
 						ifAbsent: [ false ] ]
-			ifFound: [ :e | self reader addFieldDescribedByMagritte: e ]
+			ifFound: [ :e | 
+				self flag: 'need a way to customize the reader here'.
+				self reader addFieldDescribedByMagritte: e ]
 			ifNone: [ self reader addIgnoredField ] ].
 	^ self reader upToEnd "or do more processing e.g. `select: [ :record | record lastName isNotNil ]`"
 ]
