@@ -2,13 +2,34 @@ Class {
 	#name : #MACSVTestPerson,
 	#superclass : #Object,
 	#instVars : [
-		'customReadField',
 		'phoneNumber',
 		'birthdate',
-		'name'
+		'name',
+		'birthplace',
+		'wikipediaUrl'
 	],
 	#category : #'Neo-CSV-Magritte-Tests'
 }
+
+{ #category : #accessing }
+MACSVTestPerson class >> exampleAlanKay [
+
+	^ self new
+		name: 'Alan Kay';
+		birthdate: '5/17/1940' asDate;
+		birthplace: 'Springfield, Massachusetts, U.S.';
+		wikipediaUrl: 'https://en.wikipedia.org/wiki/Alan_Kay' asUrl
+		yourself
+]
+
+{ #category : #'magritte-accessing' }
+MACSVTestPerson >> addressDescription [
+	<magritteDescription>
+	^ MAStringDescription new
+		accessor: #address;
+		priority: 40;
+		yourself
+]
 
 { #category : #accessing }
 MACSVTestPerson >> birthdate [
@@ -26,6 +47,26 @@ MACSVTestPerson >> birthdateDescription [
 	^ MADateDescription new
 		accessor: #birthdate;
 		csvFieldName: 'DOB';
+		priority: 30;
+		yourself
+]
+
+{ #category : #accessing }
+MACSVTestPerson >> birthplace [
+	^ birthplace
+]
+
+{ #category : #accessing }
+MACSVTestPerson >> birthplace: anObject [
+	birthplace := anObject
+]
+
+{ #category : #'magritte-accessing' }
+MACSVTestPerson >> birthplaceDescription [
+	<magritteDescription>
+	^ MAStringDescription new
+		accessor: #birthplace;
+		priority: 40;
 		yourself
 ]
 
@@ -45,6 +86,7 @@ MACSVTestPerson >> nameDescription [
 	^ MAStringDescription new
 		accessor: #name;
 		csvFieldName: 'Name';
+		priority: 10;
 		yourself
 ]
 
@@ -64,6 +106,17 @@ MACSVTestPerson >> phoneNumberDescription [
 	^ MANumberDescription new
 		accessor: #phoneNumber;
 		csvFieldName: 'Phone Number';
+		priority: 20;
 		csvReader: [ :s | (s select: #isDigit) asNumber ];
 		yourself
+]
+
+{ #category : #accessing }
+MACSVTestPerson >> wikipediaUrl [
+	^ wikipediaUrl
+]
+
+{ #category : #accessing }
+MACSVTestPerson >> wikipediaUrl: anObject [
+	wikipediaUrl := anObject
 ]
