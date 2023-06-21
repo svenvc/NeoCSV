@@ -151,13 +151,15 @@ NeoNumberParser >> on: readStream [
 
 { #category : #parsing }
 NeoNumberParser >> parseNumber [
-	| negated number |
+	| negated number isFloat |
 	negated := stream peekFor: $-.
 	number := self parseNumberInteger.
-	(stream peekFor: radixPoint)
-		ifTrue: [ number := number + self parseNumberFraction ].
+	isFloat := (stream peekFor: radixPoint)
+		ifTrue: [ number := number + self parseNumberFraction. true ]
+		ifFalse: [ false ].
 	((stream peekFor: $e) or: [ stream peekFor: $E ])
 		ifTrue: [ number := number * self parseNumberExponent ].
+	isFloat ifTrue: [ number := number asFloat ].
 	negated
 		ifTrue: [ number := number negated ].
 	^ number
@@ -180,7 +182,7 @@ NeoNumberParser >> parseNumberExponent [
 NeoNumberParser >> parseNumberFraction [
 	| number power |
 	number := 0.
-	power := 1.0.
+	power := 1.
 	self digitsDo: [ :x | 
 		number := base * number + x.
 		power := power * base ].
