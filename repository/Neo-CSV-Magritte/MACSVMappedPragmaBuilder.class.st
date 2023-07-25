@@ -91,6 +91,11 @@ MACSVMappedPragmaBuilder >> map: fieldName fieldTo: descriptionSelector [
 
 { #category : #accessing }
 MACSVMappedPragmaBuilder >> map: fieldName fieldTo: descriptionSelector using: reader [
+	"
+	descriptionSelector - returning the description to be used
+	reader - typically a block, where arguments are: 
+	  1) the field string input and 
+	  2) the description"
 
 	 self map at: descriptionSelector put: { fieldName. reader }
 ]
