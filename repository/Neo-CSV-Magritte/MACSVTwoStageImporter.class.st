@@ -86,7 +86,7 @@ MACSVTwoStageImporter >> initializeDomainObject: anObject fromRecord: aDictionar
 					fieldReader := desc 
 						propertyAt: self fieldReaderPropertyKey
 						ifAbsent: [ desc csvReader ].
-					value := fieldReader value: stringValue.
+					value := fieldReader cull: stringValue cull: desc.
 					desc write: value to: anObject ] ] ].
 	^ anObject
 ]
