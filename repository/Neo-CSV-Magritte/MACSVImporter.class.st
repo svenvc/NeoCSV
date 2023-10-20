@@ -5,10 +5,32 @@ Class {
 		'reader',
 		'readerClass',
 		'recordClass',
-		'source'
+		'source',
+		'columnNames'
 	],
 	#category : #'Neo-CSV-Magritte-Visitors'
 }
+
+{ #category : #accessing }
+MACSVImporter >> columnNames [
+	"See setter comment"
+	
+	^ columnNames
+]
+
+{ #category : #accessing }
+MACSVImporter >> columnNames: aCollection [
+	"If not supplied, will assume the first row contains them"
+
+	columnNames := aCollection
+]
+
+{ #category : #private }
+MACSVImporter >> configureReaderFor: aStream [
+	self reader on: aStream.
+	self columnNames ifNil: [ self columnNames: self readHeader ].
+	self reader recordClass: self recordClass.
+]
 
 { #category : #accessing }
 MACSVImporter >> execute [
@@ -33,23 +55,22 @@ MACSVImporter >> fieldReaderPropertyKey [
 
 { #category : #private }
 MACSVImporter >> importStream: aStream [
+	| fields |
+	self configureReaderFor: aStream.
 	
-	| fields header |
-	self reader on: aStream.
-	header := self readHeader.
-	self reader recordClass: self recordClass.
 	fields := self recordClass new magritteDescription children.
-	header do: [ :h | 
-		fields
-			detect: [ :f | 
-					f 
-						propertyAt: self fieldNamePropertyKey 
+	self columnNames
+		do: [ :h | 
+			fields
+				detect: [ :f | 
+					f
+						propertyAt: self fieldNamePropertyKey
 						ifPresent: [ :fieldName | fieldName = h asString trimmed ]
 						ifAbsent: [ false ] ]
-			ifFound: [ :e | 
-				self flag: 'need a way to customize the reader here'.
-				self reader addFieldDescribedByMagritte: e ]
-			ifNone: [ self reader addIgnoredField ] ].
+				ifFound: [ :e | 
+					self flag: 'need a way to customize the reader here'.
+					self reader addFieldDescribedByMagritte: e ]
+				ifNone: [ self reader addIgnoredField ] ].
 	^ self reader upToEnd "or do more processing e.g. `select: [ :record | record lastName isNotNil ]`"
 ]
 
