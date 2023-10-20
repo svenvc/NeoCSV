@@ -9,6 +9,16 @@ Class {
 }
 
 { #category : #accessing }
+MACSVTwoStageImporter >> configureReaderFor: aStream [
+	
+	super configureReaderFor: aStream.
+	
+	self reader
+		emptyFieldValue: #passNil;
+		addFieldsAt: (self columnNames collect: [ :each | each asSymbol ]) "Adapted from NeoCSVReader>>#namedColumnsConfiguration"
+]
+
+{ #category : #accessing }
 MACSVTwoStageImporter >> convertToDomainObjects: aCollectionOfDictionaries [
 	^ aCollectionOfDictionaries
 		inject: OrderedCollection new 
@@ -33,9 +43,16 @@ MACSVTwoStageImporter >> domainObjectFromDictionary: aDictionary [
 { #category : #accessing }
 MACSVTwoStageImporter >> importStream: aStream [
 	| rows |
-	self reader on: aStream.
-	rows := self readInput.
+	self configureReaderFor: aStream.
+	rows := self reader upToEnd.
 	^ self convertToDomainObjects: rows
+]
+
+{ #category : #accessing }
+MACSVTwoStageImporter >> initialize [
+
+	super initialize.
+	self recordClass: Dictionary.
 ]
 
 { #category : #accessing }
@@ -99,14 +116,6 @@ MACSVTwoStageImporter >> preprocessor [
 { #category : #accessing }
 MACSVTwoStageImporter >> preprocessor: anObject [
 	preprocessor := anObject
-]
-
-{ #category : #accessing }
-MACSVTwoStageImporter >> readInput [
-	^ self reader
-		emptyFieldValue: #passNil;
-		namedColumnsConfiguration;
-		upToEnd.
 ]
 
 { #category : #accessing }
