@@ -31,13 +31,3 @@ MAElementDescription >> defaultCsvReader [
 
 	^ [ :trimmed | self fromString: trimmed ].
 ]
-
-{ #category : #'*Neo-CSV-Magritte' }
-MAElementDescription >> fromCSV: aStringOrNil [
-	| value |
-	(aStringOrNil isNil or: [ aStringOrNil isEmpty ]) ifTrue: [ ^ nil ].
-	value := self csvReader cull: aStringOrNil trimmed cull: self.
-	(self default = value and: [ self shouldCacheDefault not ]) ifTrue: [ ^ nil ].
-	^ value
-	"Implementation note: this was extracted from NeoCSVReader's Magritte field adding because it is useful in other places e.g. MACSVImporter"
-]
