@@ -8,5 +8,5 @@ NeoCSVReader >> addFieldDescribedByMagritte: aDescription [
 		converter: [ :s | 
 			s trimmed
 				ifNotEmpty: aDescription csvReader
-				ifEmpty: [ aDescription default ] ] 
+				ifEmpty: [ aDescription undefinedValue ] ] 
 ]
