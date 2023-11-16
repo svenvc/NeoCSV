@@ -19,6 +19,12 @@ MACSVWriter >> execute [
 		ifFalse: [ self target ensureCreateFile writeStreamDo: [ :str | self writeToStream: str ] ]
 ]
 
+{ #category : #private }
+MACSVWriter >> fieldDescriptions [
+	^ self subjectDescription
+		select: [ :desc | desc hasProperty: self fieldNamePropertyKey ]
+]
+
 { #category : #accessing }
 MACSVWriter >> fieldNamePropertyKey [
 	"The property where the element description stores the field name; override to customize"
@@ -31,6 +37,22 @@ MACSVWriter >> fieldWriterPropertyKey [
 	"The property where the element description stores the field reader. Override to customize. See `MAElementDescription>>#csvReader:` method comment for more info"
 
 	^ #csvWriter
+]
+
+{ #category : #private }
+MACSVWriter >> header [
+	^ self fieldDescriptions children
+		collect: [ :field | field propertyAt: self fieldNamePropertyKey ifAbsent: [ field name ] ]
+]
+
+{ #category : #accessing }
+MACSVWriter >> includesHeader [
+	^ includesHeader ifNil: [ true ].
+]
+
+{ #category : #accessing }
+MACSVWriter >> includesHeader: anObject [
+	includesHeader := anObject
 ]
 
 { #category : #accessing }
@@ -81,17 +103,11 @@ MACSVWriter >> target: aFileOrStream [
 
 { #category : #private }
 MACSVWriter >> writeToStream: aStream [
-	| fieldDescriptions header |
+	self subjects isEmptyOrNil ifTrue: [ ^ self ].
 
 	self map do: [ :field | field configureDescriptionFor: self ].
-	
-	fieldDescriptions := self subjectDescription
-		select: [ :desc | desc hasProperty: self fieldNamePropertyKey ].
 
-	header := fieldDescriptions children
-			collect: [ :field | field propertyAt: self fieldNamePropertyKey ifAbsent: [ field name ] ].
-
-	fieldDescriptions
+	self fieldDescriptions
 		do: [ :field | 
 			| converter |
 			converter := field
@@ -99,10 +115,11 @@ MACSVWriter >> writeToStream: aStream [
 					ifAbsent: [ [ :anObject | field read: anObject ] ].
 			self writer addField: converter ].
 
-	self writer
-		on: aStream;
-		writeHeader: header;
-		nextPutAll: self subjects
+	writer := self writer on: aStream.
+
+	self includesHeader ifTrue: [ writer writeHeader: self header ].
+
+	writer nextPutAll: self subjects
 ]
 
 { #category : #accessing }
