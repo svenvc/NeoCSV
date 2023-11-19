@@ -28,6 +28,7 @@ Class {
 		'recordClassIsIndexable',
 		'fieldAccessors',
 		'emptyFieldValue',
+		'emptyFieldInput',
 		'strict'
 	],
 	#category : #'Neo-CSV-Core'
@@ -298,6 +299,14 @@ NeoCSVReader >> do: block [
 ]
 
 { #category : #'initialize-release' }
+NeoCSVReader >> emptyFieldInput: block [
+	"Set an optional block to test for field input values that should be considered empty.
+	The default is nil, equivalent to [ :field | field isEmpty ]."
+
+	emptyFieldInput := block
+]
+
+{ #category : #'initialize-release' }
 NeoCSVReader >> emptyFieldValue: object [
 	"Set the value to be used when reading empty or missing fields.
 	The default is nil. Empty or missing fields are never set 
@@ -452,11 +461,14 @@ NeoCSVReader >> readEndOfQuotedField [
 
 { #category : #'private - reading' }
 NeoCSVReader >> readField [
-	^ self peekQuote
-		ifTrue: [
-			self readQuotedField ]
-		ifFalse: [
-			self readUnquotedField ]
+	| field |
+	field := self peekQuote
+		ifTrue: [ self readQuotedField ]
+		ifFalse: [ self readUnquotedField ].
+	(field ~= emptyFieldValue and: [ emptyFieldInput notNil ]) ifTrue: [ 
+		(emptyFieldInput value: field)
+			ifTrue: [ ^ emptyFieldValue ] ].
+	^ field
 ]
 
 { #category : #'private - reading' }
