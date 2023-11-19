@@ -7,7 +7,8 @@ Class {
 		'target',
 		'subjects',
 		'map',
-		'subjectDescription'
+		'subjectDescription',
+		'ignoresUnkownFields'
 	],
 	#category : #'Neo-CSV-Magritte-Visitors'
 }
@@ -46,6 +47,16 @@ MACSVWriter >> header [
 ]
 
 { #category : #accessing }
+MACSVWriter >> ignoresUnknownFields [
+	^ ignoresUnkownFields ifNil: [ false ]
+]
+
+{ #category : #accessing }
+MACSVWriter >> ignoresUnknownFields: anObject [
+	ignoresUnkownFields := anObject
+]
+
+{ #category : #accessing }
 MACSVWriter >> includesHeader [
 	^ includesHeader ifNil: [ true ].
 ]
@@ -74,9 +85,14 @@ MACSVWriter >> map: aString fieldDo: aBlock [
 	self map add: field.
 ]
 
-{ #category : #private }
+{ #category : #accessing }
 MACSVWriter >> subjectDescription [
 	^ subjectDescription ifNil: [ subjectDescription := self subjects first magritteDescription ]
+]
+
+{ #category : #accessing }
+MACSVWriter >> subjectDescription: anMAContainer [
+	subjectDescription := anMAContainer
 ]
 
 { #category : #accessing }
@@ -109,11 +125,15 @@ MACSVWriter >> writeToStream: aStream [
 
 	self fieldDescriptions
 		do: [ :field | 
-			| converter |
+			| converter wrappedConverter |
 			converter := field
 					propertyAt: self fieldWriterPropertyKey
 					ifAbsent: [ [ :anObject | field read: anObject ] ].
-			self writer addField: converter ].
+			wrappedConverter := [ :anObject |
+				(self ignoresUnknownFields not or: [ field accessor canRead: anObject ])
+					ifTrue: [ converter value: anObject ]
+					ifFalse: [ nil ] ].
+			self writer addField: wrappedConverter ].
 
 	writer := self writer on: aStream.
 

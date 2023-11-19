@@ -59,3 +59,55 @@ MACSVWriterTests >> testDefaultMapping [
 "Alan Kay","","17 May 1940"
 ' withUnixLineEndings.
 ]
+
+{ #category : #tests }
+MACSVWriterTests >> testIgnoreUnknownFields [
+
+	| field substitution unknownField |
+	field := MACSVTestPerson magritteTemplate birthdateDescription.
+	unknownField := MAStringDescription new
+		accessor: #unknownSelector;
+		csvFieldName: 'Unknown';
+		priority: 10;
+		yourself.
+	substitution := MAContainer withAll: { field. unknownField }.
+		
+	writer
+		subjectDescription: substitution;
+		ignoresUnknownFields: true;
+		execute.
+		
+	self assert: target contents equals: '"DOB","Unknown"
+"17 May 1940",""
+' withUnixLineEndings.
+]
+
+{ #category : #tests }
+MACSVWriterTests >> testSubjectDescriptionSubstitution [
+
+	writer
+		subjectDescription: MACSVTestPerson magritteTemplate birthdateDescription asContainer;
+		execute.
+		
+	self assert: target contents equals: '"DOB"
+"17 May 1940"
+' withUnixLineEndings.
+]
+
+{ #category : #tests }
+MACSVWriterTests >> testUnknownFields [
+
+	| unknownField |
+	unknownField := MAStringDescription new
+		accessor: #unknownSelector;
+		csvFieldName: 'Unknown';
+		priority: 10;
+		yourself.
+		
+	self 
+		should: [ 
+			writer
+				subjectDescription: unknownField asContainer;
+				execute ] 
+		raise: MessageNotUnderstood.
+]
