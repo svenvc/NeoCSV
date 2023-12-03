@@ -79,6 +79,40 @@ NeoCSVData >> headerForPresentation [
 		ifNil: [ self data ifNotNil: [ (1 to: self data first size) collect: #asString ] ]
 ]
 
+{ #category : #accessing }
+NeoCSVData >> numberOfColumns [
+	^ header
+		ifNil: [ 
+			self data ifNil: [ 0 ] ifNotNil: [ self data first size ] ]
+		ifNotNil: [ header size ]
+]
+
+{ #category : #accessing }
+NeoCSVData >> numberOfRows [
+	^ data ifNil: [ 0 ] ifNotNil: [ data size ]
+]
+
+{ #category : #printing }
+NeoCSVData >> printOn: stream [
+	super printOn: stream.
+	stream 
+		nextPut: $(;
+		print: self numberOfRows;
+		space;
+		nextPutAll: 'row'.
+	self numberOfRows = 1 ifFalse: [ stream nextPut: $s ].
+	stream
+		space;
+		nextPut: $x;
+		space;
+		print: self numberOfColumns;
+		space;
+		nextPutAll: 'column'.
+	self numberOfColumns = 1 ifFalse: [ stream nextPut: $s ].
+	stream
+		nextPut: $)
+]
+
 { #category : #writing }
 NeoCSVData >> writeOn: characterWriteStream [
 	| writer |
