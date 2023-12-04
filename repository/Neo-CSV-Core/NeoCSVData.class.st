@@ -21,29 +21,30 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'header',
-		'data'
+		'data',
+		'types'
 	],
 	#category : #'Neo-CSV-Core'
 }
 
 { #category : #'instance creation' }
 NeoCSVData class >> readAsDictionariesFrom: characterReadStream [
-	| reader csvData |
-	reader := NeoCSVReader on: characterReadStream.
-	csvData := self new.
-	csvData header: reader namedColumnsConfiguration.
-	csvData data: reader upToEnd.
-	^ csvData
+	^ self new readAsDictionariesFrom: characterReadStream; yourself
 ]
 
 { #category : #'instance creation' }
 NeoCSVData class >> readFrom: characterReadStream [
-	| reader csvData |
-	reader := NeoCSVReader on: characterReadStream.
-	csvData := self new.
-	csvData header: reader readHeader.
-	csvData data: reader upToEnd.
-	^ csvData
+	^ self new readFrom: characterReadStream; yourself
+]
+
+{ #category : #accessing }
+NeoCSVData class >> typesMap [
+	^ {
+		#string -> [ :string | string ].
+		#number -> [ :string | NeoNumberParser parse: string ].
+		#timestamp -> [ :string | DateAndTime fromString: string ].
+		#boolean -> [ :string | #(true t yes y '1') includes: string asLowercase ]
+	} asDictionary
 ]
 
 { #category : #'instance creation' }
@@ -61,6 +62,21 @@ NeoCSVData >> data [
 { #category : #accessing }
 NeoCSVData >> data: collectionOfRecords [
 	data := collectionOfRecords
+]
+
+{ #category : #testing }
+NeoCSVData >> hasData [
+	^ data notNil and: [ data size > 0 ]
+]
+
+{ #category : #testing }
+NeoCSVData >> hasHeader [
+	^ header notNil and: [ header size > 0 ]
+]
+
+{ #category : #testing }
+NeoCSVData >> hasTypes [
+	^ types notNil and: [ types size > 0 ]
 ]
 
 { #category : #accessing }
@@ -111,6 +127,58 @@ NeoCSVData >> printOn: stream [
 	self numberOfColumns = 1 ifFalse: [ stream nextPut: $s ].
 	stream
 		nextPut: $)
+]
+
+{ #category : #reading }
+NeoCSVData >> readAsDictionariesFrom: characterReadStream [
+	| reader |
+	reader := NeoCSVReader on: characterReadStream.
+	reader recordClass: Dictionary.
+	self hasHeader
+		ifTrue: [ reader fieldCount: header size ]
+		ifFalse: [ self header: reader readHeader ].
+	self hasTypes
+		ifTrue: [ 
+			self types with: self header do: [ :type :column |
+				reader addFieldAt: column converter: (self class typesMap at: type) ] ].
+	self data: reader upToEnd
+]
+
+{ #category : #reading }
+NeoCSVData >> readFrom: characterReadStream [
+	| reader |
+	reader := NeoCSVReader on: characterReadStream.
+	self hasHeader
+		ifTrue: [ reader fieldCount: header size ]
+		ifFalse: [ self header: reader readHeader ].
+	self hasTypes
+		ifTrue: [ 
+			self types do: [ :type |
+				reader addFieldConverter: (self class typesMap at: type) ] ].
+	self data: reader upToEnd
+]
+
+{ #category : #accessing }
+NeoCSVData >> typeForColumnAt: index [
+	self hasTypes ifFalse: [ ^ #string ].
+	^ self types at: index
+]
+
+{ #category : #accessing }
+NeoCSVData >> typeForColumnNamed: columnName [
+	self hasHeader ifFalse: [ ^ #string ].
+	^ self typeForColumnAt: (self header indexOf: columnName)
+]
+
+{ #category : #accessing }
+NeoCSVData >> types [
+	^ types
+]
+
+{ #category : #accessing }
+NeoCSVData >> types: collectionOfTypeSymbols [
+	self assert: (collectionOfTypeSymbols asSet \ self class typesMap keys) isEmpty.
+	types := collectionOfTypeSymbols
 ]
 
 { #category : #writing }
