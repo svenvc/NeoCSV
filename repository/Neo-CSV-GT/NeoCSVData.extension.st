@@ -31,5 +31,6 @@ NeoCSVData >> gtViewHeaderFor: composite [
 		priority: 30;
 		items: [ self header ];
 		column: 'Position' text: [ :_ :position | position ];
-		column: 'Field' text: #yourself weight: 5
+		column: 'Field' text: #yourself weight: 2;
+		column: 'Type' text: [ :_ :position | self typeForColumnAt: position ]
 ]
