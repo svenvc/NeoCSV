@@ -19,6 +19,7 @@ Class {
 MACSVTwoStageImporter >> configureReaderFor: aStream [
 	
 	super configureReaderFor: aStream.
+	self reader recordClass: Dictionary.
 	
 	self reader
 		emptyFieldValue: #passNil;
