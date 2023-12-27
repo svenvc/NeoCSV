@@ -19,6 +19,7 @@ Class {
 MACSVTwoStageImporter >> configureReaderFor: aStream [
 	
 	super configureReaderFor: aStream.
+	self reader recordClass: Dictionary.
 	
 	self reader
 		emptyFieldValue: #passNil;
@@ -88,7 +89,7 @@ MACSVTwoStageImporter >> initializeDomainObject: anObject fromRecord: aDictionar
 { #category : #accessing }
 MACSVTwoStageImporter >> initializeDomainObject: anObject fromRecord: aDictionary mapping: mapBlock descriptionDo: descriptionBlock [
 	"
-	anObject - domain objec to be initialized
+	anObject - domain object to be initialized
 	aDictionary - keys are CSV column names
 	mapBlock - use to modify existing descriptions; argument will be an MACSVMappingPragmaBuilder to configure
 	descriptionBlock - argument is the container description for anObject, for further configuration e.g. adding an element description"
