@@ -8,7 +8,8 @@ Class {
 		'subjects',
 		'map',
 		'subjectDescription',
-		'ignoresUnkownFields'
+		'ignoresUnkownFields',
+		'includesHeader'
 	],
 	#category : #'Neo-CSV-Magritte-Visitors'
 }
@@ -86,6 +87,14 @@ MACSVWriter >> map: aString fieldDo: aBlock [
 ]
 
 { #category : #accessing }
+MACSVWriter >> map: aString fieldSource: aBlock [
+
+	self
+		map: aString 
+		fieldDo: [ :field | field descriptionSource: aBlock ]
+]
+
+{ #category : #accessing }
 MACSVWriter >> subjectDescription [
 	^ subjectDescription ifNil: [ subjectDescription := self subjects first magritteDescription ]
 ]
@@ -128,10 +137,15 @@ MACSVWriter >> writeToStream: aStream [
 			| converter wrappedConverter |
 			converter := field
 					propertyAt: self fieldWriterPropertyKey
-					ifAbsent: [ [ :anObject | field read: anObject ] ].
+					ifAbsent: #yourself.
 			wrappedConverter := [ :anObject |
 				(self ignoresUnknownFields not or: [ field accessor canRead: anObject ])
-					ifTrue: [ converter value: anObject ]
+					ifTrue: [
+						| aValue |
+						aValue := field read: anObject.
+						aValue = field undefinedValue ifTrue: [
+							aValue := field default ].
+						converter cull: aValue cull: anObject ]
 					ifFalse: [ nil ] ].
 			self writer addField: wrappedConverter ].
 
