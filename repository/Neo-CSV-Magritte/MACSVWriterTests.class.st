@@ -30,7 +30,6 @@ MACSVWriterTests >> testAddedDescription [
 				MAUrlDescription new
 					accessor: #wikipediaUrl;
 					priority: 25;
-					csvFieldName: 'Wikipedia';
 					yourself ] ];
 		execute.
 		
