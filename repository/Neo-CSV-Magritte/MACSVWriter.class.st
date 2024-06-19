@@ -143,8 +143,11 @@ MACSVWriter >> writeToStream: aStream [
 					ifTrue: [
 						| aValue |
 						aValue := field read: anObject.
+						
+						"`#read: returns either a non-nil value or #undefinedValue, so the following test is sufficient e.g. not checking for nil"
 						aValue = field undefinedValue ifTrue: [
 							aValue := field default ].
+							
 						converter cull: aValue cull: anObject ]
 					ifFalse: [ nil ] ].
 			self writer addField: wrappedConverter ].
