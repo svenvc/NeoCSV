@@ -3,7 +3,24 @@ Sometimes, you just can't fully create your domain objects from CSV in one pass.
 - Multiple rows combine into one object (`inject:into:` can be helpful here)
 - Multiple cells combine into one object field
 
-To handle such a case, subclass me and, at minimum, override `#convertToDomainObjects:`. See its comment for more info. Implementations of that method often utilize my `#initializeDomainObject:fromRecord:` helper method.
+To handle such a case, subclass me and, at minimum, override `#domainObjectFromDictionary:`. See its comment for more info. Implementations of that method often utilize my `#initializeDomainObject:fromRecord:` helper method.
+
+##Combining Multiple Cells into One Field
+Typically, you would override `domainObjectFromDictionary:`, do a super send, and then 
+Ideally, you would have a domain value object whose state is represented by these fields. If so, a common pattern is to  and pass this object to `` like so:
+```smalltalk
+	result := super domainObjectFromDictionary: aDictionary.
+	
+	aValueObject := self 
+		initializeDomainObject: MyValueObject new 
+		fromRecord: aDictionary.
+		
+	^ result
+		fooBar: aValueObject;
+		yourself
+```
+
+If the object can't be created anew - say it lives in a registry - you can always just pull
 "
 Class {
 	#name : #MACSVTwoStageImporter,
@@ -88,12 +105,12 @@ MACSVTwoStageImporter >> initializeDomainObject: anObject fromRecord: aDictionar
 
 { #category : #accessing }
 MACSVTwoStageImporter >> initializeDomainObject: anObject fromRecord: aDictionary mapping: mapBlock descriptionDo: descriptionBlock [
-	"
-	anObject - domain object to be initialized
-	aDictionary - keys are CSV column names
-	mapBlock - use to modify existing descriptions; argument will be an MACSVMappingPragmaBuilder to configure
-	descriptionBlock - argument is the container description for anObject, for further configuration e.g. adding an element description"
-	
+	"Send me only if you want to customize the domain object's Magritte description. Otherwise send one of the similar messages omitting the #descriptionDo: argument because my usage may seem a bit verbose due to creation of MADescriptions by hand, but I provide advantages - like gracefully handling nils. My arguments are as follows:
+		anObject - domain object to be initialized
+		aDictionary - keys are CSV column names
+		mapBlock - use to modify existing descriptions; argument will be an MACSVMappingPragmaBuilder to configure
+		descriptionBlock - argument is the container description for anObject, for further configuration e.g. adding an element description"
+		
 	| contDesc builder |
 	builder := MACSVMappedPragmaBuilder new
 		fieldNamePropertyKey: self fieldNamePropertyKey;
