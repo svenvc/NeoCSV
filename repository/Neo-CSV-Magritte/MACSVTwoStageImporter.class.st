@@ -56,6 +56,7 @@ MACSVTwoStageImporter >> convertToDomainObjects: aCollectionOfDictionaries [
 			(self selectBlock value: rowDict)
 				ifTrue: [ 
 					result := self domainObjectFromDictionary: rowDict.
+					self prepareRecord: result.
 					col add: result ].
 			col ]
 ]
@@ -70,8 +71,9 @@ MACSVTwoStageImporter >> domainObjectFromDictionary: aDictionary [
 
 { #category : #accessing }
 MACSVTwoStageImporter >> importStream: aStream [
-	| rows |
-	self configureReaderFor: aStream.
+	| rows preparedStream |
+	preparedStream := self prepareStream: aStream.
+	self configureReaderFor: preparedStream.
 	rows := self reader upToEnd.
 	^ self convertToDomainObjects: rows
 ]
@@ -137,13 +139,27 @@ MACSVTwoStageImporter >> initializeDomainObject: anObject fromRecord: aDictionar
 ]
 
 { #category : #accessing }
+MACSVTwoStageImporter >> prepareRecord: aDomainObject [
+	"Override this to fix input problems which are easier to fix utilizing real accessors and domain objects instead of in the preprocessor where you have dictionary keys and strings"
+]
+
+{ #category : #accessing }
+MACSVTwoStageImporter >> prepareStream: aStream [
+	"Override me e.g. if the input is not proper CSV. One might remove a standard number of header or footer lines, handle blank columns, etc"
+
+	^ aStream
+]
+
+{ #category : #accessing }
 MACSVTwoStageImporter >> preprocessor [
 	^ preprocessor ifNil: [ #yourself ]
 ]
 
 { #category : #accessing }
-MACSVTwoStageImporter >> preprocessor: anObject [
-	preprocessor := anObject
+MACSVTwoStageImporter >> preprocessor: aValuable [
+	"Consider #prepareObject: first because it is generally easier to fix the record after initialization because we have real accessors and domain objects e.g. aDate instead of aDateString"
+
+	preprocessor := aValuable
 ]
 
 { #category : #accessing }
