@@ -6,7 +6,8 @@ Class {
 		'readerClass',
 		'recordClass',
 		'source',
-		'columnNames'
+		'columnNames',
+		'recordMagritteDescription'
 	],
 	#category : #'Neo-CSV-Magritte-Visitors'
 }
@@ -58,7 +59,7 @@ MACSVImporter >> importStream: aStream [
 	| fields |
 	self configureReaderFor: aStream.
 	
-	fields := self recordClass new magritteDescription children.
+	fields := self recordMagritteDescription children.
 	self columnNames
 		do: [ :h | 
 			fields
@@ -103,6 +104,18 @@ MACSVImporter >> recordClass [
 { #category : #accessing }
 MACSVImporter >> recordClass: aClass [
 	recordClass := aClass
+]
+
+{ #category : #'as yet unclassified' }
+MACSVImporter >> recordMagritteDescription [
+
+	^ recordMagritteDescription ifNil: [ recordMagritteDescription := self recordClass new magritteDescription ]
+]
+
+{ #category : #'as yet unclassified' }
+MACSVImporter >> recordMagritteDescription: anMAContainer [
+
+	recordMagritteDescription := anMAContainer
 ]
 
 { #category : #accessing }
