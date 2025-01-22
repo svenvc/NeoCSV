@@ -96,7 +96,7 @@ MACSVWriter >> map: aString fieldSource: aBlock [
 
 { #category : #accessing }
 MACSVWriter >> subjectDescription [
-	^ subjectDescription ifNil: [ subjectDescription := self subjects first magritteDescription ]
+	^ subjectDescription ifNil: [ subjectDescription := self subjects atRandom magritteDescription ]
 ]
 
 { #category : #accessing }
