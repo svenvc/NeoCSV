@@ -110,7 +110,7 @@ MACSVTwoStageImporter >> initializeDomainObject: anObject fromRecord: aDictionar
 	"Send me only if you want to customize the domain object's Magritte description. Otherwise send one of the similar messages omitting the #descriptionDo: argument because my usage may seem a bit verbose due to creation of MADescriptions by hand, but I provide advantages - like gracefully handling nils. My arguments are as follows:
 		anObject - domain object to be initialized
 		aDictionary - keys are CSV column names
-		mapBlock - use to modify existing descriptions; argument will be an MACSVMappingPragmaBuilder to configure
+		mapBlock - use to modify existing descriptions; argument will be an MACSVMappedPragmaBuilder to configure
 		descriptionBlock - argument is the container description for anObject, for further configuration e.g. adding an element description"
 		
 	| contDesc builder |
