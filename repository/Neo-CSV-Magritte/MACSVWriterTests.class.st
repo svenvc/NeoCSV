@@ -34,7 +34,7 @@ MACSVWriterTests >> testAddedDescription [
 		execute.
 		
 	self assert: target contents equals: '"Name","Phone Number","Wikipedia","DOB"
-"Alan Kay","","https://en.wikipedia.org/wiki/Alan_Kay","17 May 1940"
+"Alan Kay","","https://en.wikipedia.org/wiki/Alan_Kay","1940-05-17"
 ' withUnixLineEndings.
 ]
 
@@ -47,7 +47,7 @@ MACSVWriterTests >> testAlteredDescription [
 		execute.
 		
 	self assert: target contents equals: '"Name","Phone Number","DOB","Birthplace String"
-"Alan Kay","","17 May 1940","Springfield, Massachusetts, U.S."
+"Alan Kay","","1940-05-17","Springfield, Massachusetts, U.S."
 ' withUnixLineEndings.
 ]
 
@@ -55,7 +55,7 @@ MACSVWriterTests >> testAlteredDescription [
 MACSVWriterTests >> testDefaultMapping [
 	writer execute.
 	self assert: target contents equals: '"Name","Phone Number","DOB"
-"Alan Kay","","17 May 1940"
+"Alan Kay","","1940-05-17"
 ' withUnixLineEndings.
 ]
 
@@ -77,7 +77,7 @@ MACSVWriterTests >> testIgnoreUnknownFields [
 		execute.
 		
 	self assert: target contents equals: '"DOB","Unknown"
-"17 May 1940",""
+"1940-05-17",""
 ' withUnixLineEndings.
 ]
 
@@ -89,7 +89,7 @@ MACSVWriterTests >> testSubjectDescriptionSubstitution [
 		execute.
 		
 	self assert: target contents equals: '"DOB"
-"17 May 1940"
+"1940-05-17"
 ' withUnixLineEndings.
 ]
 
